@@ -1,3 +1,7 @@
+app.get('/', (req, res) => {
+  res.send('MI WEBHOOK FUNCIONA');
+});
+
 // Import Express.js
 const express = require('express');
 
