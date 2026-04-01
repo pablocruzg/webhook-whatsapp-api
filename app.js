@@ -22,11 +22,27 @@ app.get('/', (req, res) => {
     return res.status(200).send(challenge);
   }
 
+  try {
+    // 👇 ENVÍA A TU PHP
+    await axios.post('https://www.asesoria-web.com.mx/chatbotwapp/webhook.php', req.body, {
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      timeout: 5000
+    });
+
+    console.log('✅ Enviado a PHP correctamente');
+
+  } catch (error) {
+    console.error('❌ Error enviando a PHP:', error.message);
+  }
+  
   // 👇 IMPORTANTE: no bloquear
   res.send('OK');
 });
 
 // Route for POST requests 
+const axios = require('axios');
 app.post('/', (req, res) => { 
 const timestamp = new Date().toISOString().replace('T', ' ').slice(0, 19); 
 console.log(\n\nWebhook received ${timestamp}\n); 
