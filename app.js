@@ -11,6 +11,7 @@ app.use(express.json());
 const port = process.env.PORT || 3000;
 const verifyToken = process.env.VERIFY_TOKEN;
 
+
 // Route for GET requests
 app.get('/', (req, res) => {
   const mode = req.query['hub.mode'];
@@ -21,6 +22,20 @@ app.get('/', (req, res) => {
     console.log('WEBHOOK VERIFIED');
     return res.status(200).send(challenge);
   }
+  
+  // 👇 IMPORTANTE: no bloquear
+  res.send('OK');
+});
+
+// Route for POST requests 
+const axios = require('axios');
+app.post('/', (req, res) => { 
+const timestamp = new Date().toISOString().replace('T', ' ').slice(0, 19); 
+console.log(\n\nWebhook received ${timestamp}\n); 
+console.log(JSON.stringify(req.body, null, 2)); 
+res.status(200).end(); 
+});
+
 
   try {
     // 👇 ENVÍA A TU PHP
@@ -46,19 +61,7 @@ app.get('/', (req, res) => {
     console.error('Error general:', error.message);
   }
 }
-  
-  // 👇 IMPORTANTE: no bloquear
-  res.send('OK');
-});
 
-// Route for POST requests 
-const axios = require('axios');
-app.post('/', (req, res) => { 
-const timestamp = new Date().toISOString().replace('T', ' ').slice(0, 19); 
-console.log(\n\nWebhook received ${timestamp}\n); 
-console.log(JSON.stringify(req.body, null, 2)); 
-res.status(200).end(); 
-});
 
 // Start the server
 app.listen(port, () => {
