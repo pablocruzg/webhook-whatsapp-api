@@ -37,6 +37,22 @@ res.status(200).end();
 });
 
 
+
+await axios.post(
+  'https://www.asesoria-web.com.mx/chatbotwapp/webhook.php',
+  { test: "hola" },
+  {
+    headers: {
+      'Content-Type': 'application/json',
+      'User-Agent': 'Mozilla/5.0'
+    },
+    timeout: 5000
+  }
+);
+
+
+/*
+
   try {
     // 👇 ENVÍA A TU PHP
     await axios.post('https://www.asesoria-web.com.mx/chatbotwapp/webhook.php', req.body, {
@@ -61,7 +77,7 @@ res.status(200).end();
     console.error('Error general:', error.message);
   }
 }
-
+*/
 
 // Start the server
 app.listen(port, () => {
