@@ -38,8 +38,8 @@ res.status(200).end();
 
 
 
-
   try {
+console.log('🚀 Intentando enviar a PHP...');
     // 👇 ENVÍA A TU PHP
     await axios.post('https://www.asesoria-web.com.mx/chatbotwapp/webhook.php', req.body, {
       headers: {
@@ -52,7 +52,7 @@ res.status(200).end();
 
   } catch (error) {
   console.error('❌ Error completo:');
-
+console.log(error.response.headers);
   if (error.response) {
     console.error('Status:', error.response.status);
     console.error('Headers:', error.response.headers);
