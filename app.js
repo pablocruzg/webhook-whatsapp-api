@@ -34,8 +34,18 @@ app.get('/', (req, res) => {
     console.log('✅ Enviado a PHP correctamente');
 
   } catch (error) {
-    console.error('❌ Error enviando a PHP:', error.message);
+  console.error('❌ Error completo:');
+
+  if (error.response) {
+    console.error('Status:', error.response.status);
+    console.error('Headers:', error.response.headers);
+    console.error('Data:', error.response.data);
+  } else if (error.request) {
+    console.error('No hubo respuesta del servidor');
+  } else {
+    console.error('Error general:', error.message);
   }
+}
   
   // 👇 IMPORTANTE: no bloquear
   res.send('OK');
