@@ -34,12 +34,8 @@ const timestamp = new Date().toISOString().replace('T', ' ').slice(0, 19);
 console.log(\n\nWebhook received ${timestamp}\n); 
 console.log(JSON.stringify(req.body, null, 2)); 
 //res.status(200).end(); 
-
-console.log(\n\nIntentando enviar a PHP...\n\n);
-
-
+console.log(Test Signal);
   try {
-console.log('🚀 Intentando enviar a PHP...');
     // 👇 ENVÍA A TU PHP
     await axios.post('https://www.asesoria-web.com.mx/chatbotwapp/webhook.php', req.body, {
       headers: {
@@ -52,7 +48,6 @@ console.log('🚀 Intentando enviar a PHP...');
 
   } catch (error) {
   console.error('❌ Error completo:');
-console.log(error.response.headers);
   if (error.response) {
     console.error('Status:', error.response.status);
     console.error('Headers:', error.response.headers);
