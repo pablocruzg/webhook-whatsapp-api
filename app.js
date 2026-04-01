@@ -38,20 +38,6 @@ res.status(200).end();
 
 
 
-await axios.post(
-  'https://www.asesoria-web.com.mx/chatbotwapp/webhook.php',
-  { test: "hola" },
-  {
-    headers: {
-      'Content-Type': 'application/json',
-      'User-Agent': 'Mozilla/5.0'
-    },
-    timeout: 5000
-  }
-);
-
-
-/*
 
   try {
     // 👇 ENVÍA A TU PHP
@@ -59,7 +45,7 @@ await axios.post(
       headers: {
         'Content-Type': 'application/json'
       },
-      timeout: 5000
+      timeout: 25000
     });
 
     console.log('✅ Enviado a PHP correctamente');
@@ -77,7 +63,7 @@ await axios.post(
     console.error('Error general:', error.message);
   }
 }
-*/
+
 
 // Start the server
 app.listen(port, () => {
