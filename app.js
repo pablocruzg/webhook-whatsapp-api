@@ -31,35 +31,7 @@ app.post('/', async (req, res) => {
 
   console.log(`\n\nWebhook received ${timestamp}\n`);
   console.log(JSON.stringify(req.body, null, 2));
-  console.log('Test Signal 1');
 
-  try {
-    await axios.post(
-      'https://www.asesoria-web.com.mx/chatbotwapp/webhook.php',
-      req.body,
-      {
-        headers: {
-          'Content-Type': 'application/json'
-        },
-        timeout: 25000
-      }
-    );
-
-    console.log('✅ Enviado a PHP correctamente');
-
-  } catch (error) {
-    console.error('❌ Error completo:');
-
-    if (error.response) {
-      console.error('Status:', error.response.status);
-      console.error('Headers:', error.response.headers);
-      console.error('Data:', error.response.data);
-    } else if (error.request) {
-      console.error('No hubo respuesta del servidor');
-    } else {
-      console.error('Error general:', error.message);
-    }
-  }
 
   res.status(200).end();
 });
