@@ -53,7 +53,7 @@ app.post('/', async (req, res) => {
   res.status(200).end(); // ⚡ responder inmediato (como PHP)
 
   try {
-	 const ID_BOT = 1; // ajusta si tienes varios bots
+	 const ID_BOT =2; // ajusta si tienes varios bots
    const body = req.body;
 
     const msg = body.entry?.[0]?.changes?.[0]?.value?.messages?.[0];
