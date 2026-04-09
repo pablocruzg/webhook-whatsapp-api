@@ -5,6 +5,7 @@ app.use(express.json());
 
 const port = process.env.PORT || 3000;
 const verifyToken = process.env.VERIFY_TOKEN;
+const { addMessage } = require('./models/mensajes');
 
 // GET
 app.get('/', (req, res) => {
@@ -20,11 +21,36 @@ app.get('/', (req, res) => {
   res.send('OK');
 });
 
-
+console.log('DB_HOST:', process.env.DB_HOST);
 // POST
 const axios = require('axios');
 
 app.post('/', async (req, res) => {
+
+  res.status(200).end(); // 🔥 RESPONDER INMEDIATO (como PHP)
+
+  try {
+    const body = req.body;
+
+    const msg = body.entry?.[0]?.changes?.[0]?.value?.messages?.[0];
+    const contact = body.entry?.[0]?.changes?.[0]?.value?.contacts?.[0];
+
+    if (!msg) return;
+
+    const telefono = msg.from;
+    const nombre = contact?.profile?.name || 'Sin nombre';
+    const mensaje = msg.text?.body || '';
+    const fecha = new Date().toISOString().slice(0, 19).replace('T', ' ');
+
+    console.log('Mensaje:', mensaje);
+
+    await addMessage(1, nombre, telefono, fecha, mensaje, 'E');
+
+    console.log('✅ Guardado');
+
+  } catch (err) {
+    console.error('Error:', err);
+  }
 
   const timestamp = new Date().toISOString().replace('T', ' ').slice(0, 19);
 
