@@ -74,15 +74,15 @@ app.post('/', async (req, res) => {
     console.log('✅ Guardado en MySQL');
 
 
-await updateCliente(
-  telefono,
-  status_actual,   // por ahora no cambia
-  status_actual,   // anterior = mismo valor (temporal)
-  fecha,
-  conversacion
-);
+		await updateCliente(
+			telefono,
+			status_actual,   // por ahora no cambia
+			status_actual,   // anterior = mismo valor (temporal)
+			fecha,
+			conversacion
+		);
 
-console.log('🔄 Cliente actualizado');
+		console.log('🔄 Cliente actualizado');
 
 
 		let cliente = await findCliente(telefono);
@@ -103,6 +103,46 @@ console.log('🔄 Cliente actualizado');
 
 			console.log('🆕 Cliente creado');
 		}
+		
+		
+
+const { getSiguienteEstado } = require('./models/secuencias');
+const { getAccionByEstado } = require('./models/acciones');
+
+const ID_BOT = 1; // ajusta si tienes varios bots
+
+// 🔄 Obtener siguiente estado
+let siguienteEstado = await getSiguienteEstado(ID_BOT, status_actual);
+
+if (!siguienteEstado) {
+  console.log('⚠️ No hay siguiente estado');
+  return;
+}
+
+// 🎯 Obtener acción del nuevo estado
+let accion = await getAccionByEstado(ID_BOT, siguienteEstado);
+
+if (!accion) {
+  console.log('⚠️ No hay acción definida');
+  return;
+}
+
+// 🤖 Mostrar respuesta
+console.log('🤖 Respuesta:', accion.mensaje_accion);
+
+const { sendWhatsAppMessage } = require('./services/whatsapp');
+
+// 🔄 Actualizar cliente
+await updateCliente(
+  telefono,
+  siguienteEstado,
+  status_actual,
+  fecha,
+  conversacion
+);
+
+console.log('🔄 Estado actualizado');
+		
 
 
 
