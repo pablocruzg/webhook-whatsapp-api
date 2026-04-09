@@ -11,6 +11,7 @@ const {
   addCliente,
   updateCliente
 } = require('./models/clientes');
+const { sendWhatsAppMessage } = require('./services/whatsapp');
 
 // GET
 app.get('/', (req, res) => {
@@ -49,7 +50,8 @@ app.post('/', async (req, res) => {
   res.status(200).end(); // ⚡ responder inmediato (como PHP)
 
   try {
-    const body = req.body;
+	 const ID_BOT = 1; // ajusta si tienes varios bots
+   const body = req.body;
 
     const msg = body.entry?.[0]?.changes?.[0]?.value?.messages?.[0];
     const contact = body.entry?.[0]?.changes?.[0]?.value?.contacts?.[0];
@@ -69,28 +71,14 @@ app.post('/', async (req, res) => {
 
     console.log('📩 Mensaje:', mensaje);
 
-    await addMessage(1, nombre, telefono, fecha, mensaje, 'E');
 
     console.log('✅ Guardado en MySQL');
+
+		let cliente = await findCliente(telefono);
 
 		let status_actual;
 		let conversacion;
 		
-		await updateCliente(
-			telefono,
-			status_actual,   // por ahora no cambia
-			status_actual,   // anterior = mismo valor (temporal)
-			fecha,
-			conversacion
-		);
-
-		console.log('🔄 Cliente actualizado');
-
-
-		let cliente = await findCliente(telefono);
-
-
-
 		if (cliente) {
 			status_actual = cliente.status_actual;
 			conversacion = cliente.ultima_conversacion;
@@ -103,35 +91,54 @@ app.post('/', async (req, res) => {
 			status_actual = 0;
 
 			console.log('🆕 Cliente creado');
+		}		
+		
+		await updateCliente(
+			telefono,
+			status_actual,   // por ahora no cambia
+			status_actual,   // anterior = mismo valor (temporal)
+			fecha,
+			conversacion
+		);
+
+		console.log('🔄 Cliente actualizado');
+
+    await addMessage(1, nombre, telefono, fecha, mensaje, 'E');
+
+		const { getSiguienteEstado } = require('./models/secuencias');
+		const { getAccionByEstado } = require('./models/acciones');
+
+
+		// 🔄 Obtener siguiente estado
+		let siguienteEstado = await getSiguienteEstado(ID_BOT, status_actual);
+
+		if (!siguienteEstado) {
+			console.log('⚠️ No hay siguiente estado');
+			return;
 		}
+
+		// 🎯 Obtener acción del nuevo estado
+		let accion = await getAccionByEstado(ID_BOT, siguienteEstado);
+
+		if (!accion) {
+			console.log('⚠️ No hay acción definida');
+			return;
+		}
+
+await sendWhatsAppMessage(telefono, accion.mensaje_accion);
+
+console.log('📤 Mensaje enviado a WhatsApp');
+
+await addMessage(conversacion, nombre, telefono, fecha, accion.mensaje_accion, 'S');
 		
 		
 
-const { getSiguienteEstado } = require('./models/secuencias');
-const { getAccionByEstado } = require('./models/acciones');
 
-const ID_BOT = 1; // ajusta si tienes varios bots
-
-// 🔄 Obtener siguiente estado
-let siguienteEstado = await getSiguienteEstado(ID_BOT, status_actual);
-
-if (!siguienteEstado) {
-  console.log('⚠️ No hay siguiente estado');
-  return;
-}
-
-// 🎯 Obtener acción del nuevo estado
-let accion = await getAccionByEstado(ID_BOT, siguienteEstado);
-
-if (!accion) {
-  console.log('⚠️ No hay acción definida');
-  return;
-}
 
 // 🤖 Mostrar respuesta
 console.log('🤖 Respuesta:', accion.mensaje_accion);
 
-const { sendWhatsAppMessage } = require('./services/whatsapp');
+
 
 // 🔄 Actualizar cliente
 await updateCliente(
@@ -159,8 +166,6 @@ console.log('🔄 Estado actualizado');
   console.log(`\n\nWebhook received ${timestamp}\n`);
   console.log(JSON.stringify(req.body, null, 2));
 
-
-  res.status(200).end();
 });
 
 app.listen(port, () => {
