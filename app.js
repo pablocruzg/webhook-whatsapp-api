@@ -121,7 +121,7 @@ if (!opciones.length) {
 let menu = 'Selecciona una opción:\n';
 
 opciones.forEach((op, index) => {
-  menu += `${index + 1} - ${op.mensaje_accion}\n`;
+  menu += `${index + 1} - ${op.nombre}\n`;
 });
 
 await sendWhatsAppMessage(telefono, menu);
