@@ -74,24 +74,35 @@ app.post('/', async (req, res) => {
     console.log('✅ Guardado en MySQL');
 
 
-let cliente = await findCliente(telefono);
+await updateCliente(
+  telefono,
+  status_actual,   // por ahora no cambia
+  status_actual,   // anterior = mismo valor (temporal)
+  fecha,
+  conversacion
+);
 
-let status_actual;
-let conversacion;
+console.log('🔄 Cliente actualizado');
 
-if (cliente) {
-  status_actual = cliente.status_actual;
-  conversacion = cliente.ultima_conversacion;
-} else {
-  // 🔢 Obtener nueva conversación (simple por ahora)
-  conversacion = 1; // luego lo mejoramos
 
-  await addCliente(telefono, nombre, fecha, conversacion);
+		let cliente = await findCliente(telefono);
 
-  status_actual = 0;
+		let status_actual;
+		let conversacion;
 
-  console.log('🆕 Cliente creado');
-}
+		if (cliente) {
+			status_actual = cliente.status_actual;
+			conversacion = cliente.ultima_conversacion;
+		} else {
+			// 🔢 Obtener nueva conversación (simple por ahora)
+			conversacion = 1; // luego lo mejoramos
+
+			await addCliente(telefono, nombre, fecha, conversacion);
+
+			status_actual = 0;
+
+			console.log('🆕 Cliente creado');
+		}
 
 
 
