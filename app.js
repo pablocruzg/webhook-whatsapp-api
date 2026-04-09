@@ -155,10 +155,12 @@ opciones.forEach((op, index) => {
   menu += `${index + 1} - ${op.nombre}\n`;
 });
 
+
+if (opciones.length>1) {
 await sendWhatsAppMessage(telefono, menu);
 
 console.log('📤 Menú enviado');		
-
+}
 
 		
 		
