@@ -125,31 +125,54 @@ app.post('/', async (req, res) => {
 			return;
 		}
 
-await sendWhatsAppMessage(telefono, accion.mensaje_accion);
+		await sendWhatsAppMessage(telefono, accion.mensaje_accion);
 
-console.log('📤 Mensaje enviado a WhatsApp');
-
-await addMessage(conversacion, nombre, telefono, fecha, accion.mensaje_accion, 'S');
+		console.log('📤 Mensaje enviado a WhatsApp');
 		
 		
+		
+const opciones = await getOpciones(ID_BOT, status_actual);
+
+if (!opciones.length) {
+  console.log('⚠️ No hay opciones');
+  return;
+}
+
+// 📋 Construir menú
+let menu = 'Selecciona una opción:\n';
+
+opciones.forEach((op, index) => {
+  menu += `${index + 1} - ${op.mensaje_accion}\n`;
+});
+
+await sendWhatsAppMessage(telefono, menu);
+
+console.log('📤 Menú enviado');		
+		
+		
+		
+
+		await addMessage(conversacion, nombre, telefono, fecha, accion.mensaje_accion, 'S');
+				
+				
 
 
 
-// 🤖 Mostrar respuesta
-console.log('🤖 Respuesta:', accion.mensaje_accion);
+		// 🤖 Mostrar respuesta
+		console.log('🤖 Respuesta:', accion.mensaje_accion);
 
 
 
-// 🔄 Actualizar cliente
-await updateCliente(
-  telefono,
-  siguienteEstado,
-  status_actual,
-  fecha,
-  conversacion
-);
+		// 🔄 Actualizar cliente
+		await updateCliente(
+			telefono,
+			siguienteEstado,
+			status_actual,
+			fecha,
+			conversacion
+		);
 
-console.log('🔄 Estado actualizado');
+		console.log('🔄 Estado actualizado');
 		
 
 
