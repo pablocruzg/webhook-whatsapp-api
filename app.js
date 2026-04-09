@@ -21,6 +21,7 @@ app.get('/', (req, res) => {
   res.send('OK');
 });
 
+/* Codigo para validar la conexion a MySql
 console.log('DB_HOST:', process.env.DB_HOST);
 const db = require('./db');
 
@@ -33,13 +34,14 @@ const db = require('./db');
     console.error('❌ Error MySQL:', err.message);
   }
 })();
+*/
 
 // POST
 const axios = require('axios');
 
 app.post('/', async (req, res) => {
 
-  res.status(200).end(); // 🔥 RESPONDER INMEDIATO (como PHP)
+  res.status(200).end(); // ⚡ responder inmediato (como PHP)
 
   try {
     const body = req.body;
@@ -49,20 +51,27 @@ app.post('/', async (req, res) => {
 
     if (!msg) return;
 
-    const telefono = msg.from;
+    let telefono = msg.from;
     const nombre = contact?.profile?.name || 'Sin nombre';
     const mensaje = msg.text?.body || '';
+
+    // 🔧 Ajuste igual que tu PHP (MUY IMPORTANTE)
+    if (telefono.startsWith('52147')) {
+      telefono = '5247' + telefono.slice(5);
+    }
+
     const fecha = new Date().toISOString().slice(0, 19).replace('T', ' ');
 
-    console.log('Mensaje:', mensaje);
+    console.log('📩 Mensaje:', mensaje);
 
     await addMessage(1, nombre, telefono, fecha, mensaje, 'E');
 
-    console.log('✅ Guardado');
+    console.log('✅ Guardado en MySQL');
 
   } catch (err) {
-    console.error('Error:', err);
+    console.error('❌ Error:', err.message);
   }
+
 
   const timestamp = new Date().toISOString().replace('T', ' ').slice(0, 19);
 
