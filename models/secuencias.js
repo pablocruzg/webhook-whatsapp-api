@@ -17,7 +17,7 @@ async function getSiguienteEstado(id_bot, estado_actual) {
 
 async function getOpciones(id_bot, estado_actual) {
   const sql = `
-    SELECT s.sucesor, a.mensaje_accion
+    SELECT s.sucesor, a.mensaje_accion, a.nombre
     FROM secuencias s
     JOIN acciones a ON a.id_accion = s.sucesor
     WHERE s.id_bot = ?
