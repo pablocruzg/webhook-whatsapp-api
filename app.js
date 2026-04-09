@@ -65,7 +65,7 @@ app.post('/', async (req, res) => {
     const nombre = contact?.profile?.name || 'Sin nombre';
     const mensaje = msg.text?.body || '';
 
-    // 🔧 Ajuste igual que tu PHP (MUY IMPORTANTE)
+    // 🔧 Ajuste de numero de teléfono
     if (telefono.startsWith('52147')) {
       telefono = '5247' + telefono.slice(5);
     }
@@ -75,7 +75,6 @@ app.post('/', async (req, res) => {
     console.log('📩 Mensaje:', mensaje);
 
 
-    console.log('✅ Guardado en MySQL');
 
 		let cliente = await findCliente(telefono);
 
@@ -96,6 +95,10 @@ app.post('/', async (req, res) => {
 			console.log('🆕 Cliente creado');
 		}		
 		
+		
+		const siguiente_estado = await getSiguienteEstado(ID_BOT, status_actual);		
+		
+		
 		await updateCliente(
 			telefono,
 			status_actual,   // por ahora no cambia
@@ -103,10 +106,11 @@ app.post('/', async (req, res) => {
 			fecha,
 			conversacion
 		);
+		console.log('🔄 Cliente actualizado');
 
 
 
-const opciones = await getOpciones(ID_BOT, status_actual);
+const opciones = await getOpciones(ID_BOT, siguiente_estado);
 
 if (!opciones.length) {
   console.log('⚠️ No hay opciones');
@@ -126,9 +130,9 @@ console.log('📤 Menú enviado');
 
 
 
-		console.log('🔄 Cliente actualizado');
 
     await addMessage(1, nombre, telefono, fecha, mensaje, 'E');
+    console.log('✅ Guardado en MySQL');
 
 
 
