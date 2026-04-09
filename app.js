@@ -22,6 +22,18 @@ app.get('/', (req, res) => {
 });
 
 console.log('DB_HOST:', process.env.DB_HOST);
+const db = require('./db');
+
+(async () => {
+  try {
+    const conn = await db.getConnection();
+    console.log('✅ Conectado a MySQL');
+    conn.release();
+  } catch (err) {
+    console.error('❌ Error MySQL:', err.message);
+  }
+})();
+
 // POST
 const axios = require('axios');
 
