@@ -12,6 +12,8 @@ const {
   updateCliente
 } = require('./models/clientes');
 const { sendWhatsAppMessage } = require('./models/whatsapp');
+		const { getSiguienteEstado } = require('./models/secuencias');
+		const { getAccionByEstado } = require('./models/acciones');
 
 // GET
 app.get('/', (req, res) => {
@@ -127,8 +129,7 @@ console.log('📤 Menú enviado');
 
     await addMessage(1, nombre, telefono, fecha, mensaje, 'E');
 
-		const { getSiguienteEstado } = require('./models/secuencias');
-		const { getAccionByEstado } = require('./models/acciones');
+
 
 
 		// 🔄 Obtener siguiente estado
