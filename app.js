@@ -11,7 +11,7 @@ const {
   addCliente,
   updateCliente
 } = require('./models/clientes');
-const { sendWhatsAppMessage } = require('./services/whatsapp');
+const { sendWhatsAppMessage } = require('./models/whatsapp');
 
 // GET
 app.get('/', (req, res) => {
