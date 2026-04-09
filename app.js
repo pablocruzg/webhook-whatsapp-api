@@ -73,9 +73,6 @@ app.post('/', async (req, res) => {
 
     console.log('✅ Guardado en MySQL');
 
-  } catch (err) {
-    console.error('❌ Error:', err.message);
-  }
 
 let cliente = await findCliente(telefono);
 
@@ -95,6 +92,14 @@ if (cliente) {
 
   console.log('🆕 Cliente creado');
 }
+
+
+
+  } catch (err) {
+    console.error('❌ Error:', err.message);
+  }
+
+
 
 
   const timestamp = new Date().toISOString().replace('T', ' ').slice(0, 19);
