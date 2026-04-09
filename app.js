@@ -20,7 +20,6 @@ app.get('/', (req, res) => {
   res.send('OK');
 });
 
-console.log('Test Signal 0');
 
 // POST
 const axios = require('axios');
