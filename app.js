@@ -6,6 +6,11 @@ app.use(express.json());
 const port = process.env.PORT || 3000;
 const verifyToken = process.env.VERIFY_TOKEN;
 const { addMessage } = require('./models/mensajes');
+const {
+  findCliente,
+  addCliente,
+  updateCliente
+} = require('./models/clientes');
 
 // GET
 app.get('/', (req, res) => {
@@ -71,6 +76,25 @@ app.post('/', async (req, res) => {
   } catch (err) {
     console.error('❌ Error:', err.message);
   }
+
+let cliente = await findCliente(telefono);
+
+let status_actual;
+let conversacion;
+
+if (cliente) {
+  status_actual = cliente.status_actual;
+  conversacion = cliente.ultima_conversacion;
+} else {
+  // 🔢 Obtener nueva conversación (simple por ahora)
+  conversacion = 1; // luego lo mejoramos
+
+  await addCliente(telefono, nombre, fecha, conversacion);
+
+  status_actual = 0;
+
+  console.log('🆕 Cliente creado');
+}
 
 
   const timestamp = new Date().toISOString().replace('T', ' ').slice(0, 19);
