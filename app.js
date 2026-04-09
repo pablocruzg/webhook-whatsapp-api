@@ -73,7 +73,9 @@ app.post('/', async (req, res) => {
 
     console.log('✅ Guardado en MySQL');
 
-
+		let status_actual;
+		let conversacion;
+		
 		await updateCliente(
 			telefono,
 			status_actual,   // por ahora no cambia
@@ -87,8 +89,7 @@ app.post('/', async (req, res) => {
 
 		let cliente = await findCliente(telefono);
 
-		let status_actual;
-		let conversacion;
+
 
 		if (cliente) {
 			status_actual = cliente.status_actual;
