@@ -101,6 +101,28 @@ app.post('/', async (req, res) => {
 			conversacion
 		);
 
+
+
+const opciones = await getOpciones(ID_BOT, status_actual);
+
+if (!opciones.length) {
+  console.log('⚠️ No hay opciones');
+  return;
+}
+
+// 📋 Construir menú
+let menu = 'Selecciona una opción:\n';
+
+opciones.forEach((op, index) => {
+  menu += `${index + 1} - ${op.mensaje_accion}\n`;
+});
+
+await sendWhatsAppMessage(telefono, menu);
+
+console.log('📤 Menú enviado');		
+
+
+
 		console.log('🔄 Cliente actualizado');
 
     await addMessage(1, nombre, telefono, fecha, mensaje, 'E');
@@ -131,23 +153,7 @@ app.post('/', async (req, res) => {
 		
 		
 		
-const opciones = await getOpciones(ID_BOT, status_actual);
 
-if (!opciones.length) {
-  console.log('⚠️ No hay opciones');
-  return;
-}
-
-// 📋 Construir menú
-let menu = 'Selecciona una opción:\n';
-
-opciones.forEach((op, index) => {
-  menu += `${index + 1} - ${op.mensaje_accion}\n`;
-});
-
-await sendWhatsAppMessage(telefono, menu);
-
-console.log('📤 Menú enviado');		
 		
 		
 		
