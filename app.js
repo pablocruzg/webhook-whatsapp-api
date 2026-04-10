@@ -13,8 +13,9 @@ const {
 } = require('./models/clientes');
 const { sendWhatsAppMessage } = require('./models/whatsapp');
 		const { getSiguienteEstado } = require('./models/secuencias');
-		const { esMenu } = require('./models/secuencias');
 		const { getOpciones } = require('./models/secuencias');
+		const { esMenu } = require('./models/secuencias');
+		const { getAccionDeOpcionMenu } = require('./models/secuencias');
 		const { getAccionByEstado } = require('./models/acciones');
 
 // GET
@@ -90,13 +91,6 @@ app.post('/', async (req, res) => {
 			console.log('🆕 Cliente creado');
 		}		
 				
-		//Identificar si es respuesta de Opcion-Menu o Texto Input
-		let respuestaMenu = await esMenu(ID_BOT, status_actual);
-		console.log('🔄 Es respuesta de menu:', respuestaMenu, status_actual, ' - ',status_anterior);
-
-				
-		const siguiente_estado = await getSiguienteEstado(ID_BOT, status_actual);		
-				
 		await updateCliente(
 			telefono,
 			status_actual,   // por ahora no cambia
@@ -104,13 +98,23 @@ app.post('/', async (req, res) => {
 			fecha,
 			conversacion
 		);
-		console.log('🔄 Cliente actualizado');
+		console.log('🎚 Cliente actualizado');
+		
+		//Identificar si es respuesta de Opcion-Menu o Texto Input
+		let respuestaMenu = await esMenu(ID_BOT, status_actual);
+		console.log('🔄 Es respuesta de menu:', respuestaMenu, status_actual, ' - ',status_anterior);
+		if (respuestaMenu) {
+			const siguiente_estado = await getAccionDeOpcionMenu(ID_BOT, mensaje);		
+		} else {
+			const siguiente_estado = await getSiguienteEstado(ID_BOT, status_actual);		
+		}
+		console.log('🎫 Estado secuenciado -> ', siguiente_estado);
 
     await addMessage(1, nombre, telefono, fecha, mensaje, 'E');
     console.log('✅ Guardado en MySQL');
 
 		// 🔄 Obtener siguiente estado
-		let siguienteEstado = await getSiguienteEstado(ID_BOT, status_actual);
+//		let siguienteEstado = await getSiguienteEstado(ID_BOT, status_actual);
 
 		if (!siguienteEstado) {
 			console.log('⚠️ No hay siguiente estado');
