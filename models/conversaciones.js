@@ -3,13 +3,12 @@ const db = require('../db');
 // 🔄 Obtener siguiente conversacion
 async function getSiguienteConversacion() {
   const sql = `
-		SELECT MAX(conversacion) AS conversacion
-		FROM mensajes
+    SELECT IFNULL(MAX(conversacion), 0) + 1 AS siguiente
+    FROM mensajes
   `;
 
   const [rows] = await db.execute(sql);
 
-  return rows.length > 0 ? rows[0].conversacion : null;
+  return rows[0].siguiente;
 }
-
 module.exports = { getSiguienteConversacion };
