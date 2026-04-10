@@ -88,6 +88,11 @@ app.post('/', async (req, res) => {
 			console.log('🆕 Cliente creado');
 		}		
 				
+		//Identificar si es respuesta de Opcion-Menu o Texto Input
+		let respuestaMenu = await esMenu(ID_BOT, status_anterior);
+		console.log('🔄 Es respuesta de menu', respuestaMenu);
+
+				
 		const siguiente_estado = await getSiguienteEstado(ID_BOT, status_actual);		
 				
 		await updateCliente(
