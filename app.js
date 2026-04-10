@@ -108,7 +108,7 @@ app.post('/', async (req, res) => {
 		let status_siguiente;
 		if (respuestaMenu) {
 			status_siguiente = await getAccionDeOpcionMenu(ID_BOT, status_actual, mensaje);	
-   		console.log(status_siguiente, 'await getAccionDeOpcionMenu(', ID_BOT, ' - ', status_actual, ' - ' , mensaje);
+   		console.log(status_siguiente, 'await getAccionDeOpcionMenu(', ID_BOT, ' - ', status_anterior, ' - ' , mensaje);
 			//status_anterior = status_actual;
 		} else {			
 			status_siguiente = await getSiguienteEstado(ID_BOT, status_actual);		
