@@ -81,19 +81,19 @@ app.post('/', async (req, res) => {
 		if (cliente) {
 			if(cliente.status_actual==0){
 				//conversacion = 2; // luego lo mejoramos
-				conversacion = getSiguienteConversacion();
+				await conversacion = getSiguienteConversacion();
 				status_actual = await getSiguienteEstado(ID_BOT, 0);			
 				status_anterior = 0;
 				console.log('🆕 Cliente recuperado');
 			} else {
-			status_actual = cliente.status_actual;
-			status_anterior = cliente.status_anterior;
-			conversacion = cliente.ultima_conversacion;
+				status_actual = cliente.status_actual;
+				status_anterior = cliente.status_anterior;
+				await conversacion = cliente.ultima_conversacion;
 			}
 		} else {
 			// 🔢 Obtener nueva conversación (simple por ahora)
 			//conversacion = 1; // luego lo mejoramos
-			conversacion = getSiguienteConversacion();
+			await conversacion = getSiguienteConversacion();
 			await addCliente(telefono, nombre, fecha, conversacion);
 			status_actual = await getSiguienteEstado(ID_BOT, 0);			
 			status_anterior = 0;
