@@ -107,7 +107,9 @@ app.post('/', async (req, res) => {
 		
 		let status_siguiente;
 		if (respuestaMenu) {
+			console.log('status_siguiente = await getAccionDeOpcionMenu(',ID_BOT,',', status_actual,',', mensaje,')');
 			status_siguiente = await getAccionDeOpcionMenu(ID_BOT, status_actual, mensaje);	
+			console.log('status_siguiente =',status_siguiente);
 			//status_anterior = status_actual;
 		} else {			
 			status_siguiente = await getSiguienteEstado(ID_BOT, status_actual);		
@@ -121,7 +123,6 @@ app.post('/', async (req, res) => {
 			conversacion
 		);
 		console.log('🎚 Cliente actualizado');
-		
 
     await addMessage(1, nombre, telefono, fecha, mensaje, 'E');
     console.log('✅ Guardado en MySQL');
