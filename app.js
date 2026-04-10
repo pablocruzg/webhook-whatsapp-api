@@ -140,7 +140,7 @@ app.post('/', async (req, res) => {
 		const opciones = await getOpciones(ID_BOT, status_actual);
 		if (!opciones.length) {
 			console.log('⚠️ No hay opciones');
-			return;
+//			return;
 		}
 		// 📋 Construir menú
 		let menu = 'Selecciona una opción:\n';
