@@ -98,6 +98,7 @@ app.post('/', async (req, res) => {
 		if (respuestaMenu) {
 			status_actual = await getAccionDeOpcionMenu(ID_BOT, status_actual, mensaje);	
 			status_anterior = status_actual;
+			siguiente_estado = 0;
 		} else {			
 			siguiente_estado = await getSiguienteEstado(ID_BOT, status_actual);		
 		}
@@ -161,7 +162,7 @@ app.post('/', async (req, res) => {
 		// 🔄 Actualizar cliente
 		await updateCliente(
 			telefono,
-			siguienteEstado,
+			siguiente_estado,
 			status_actual,
 			fecha,
 			conversacion
