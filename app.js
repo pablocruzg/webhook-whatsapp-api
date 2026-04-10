@@ -96,10 +96,10 @@ app.post('/', async (req, res) => {
 		
 //		let siguiente_estado;
 		if (respuestaMenu) {
-			status_actual = await getAccionDeOpcionMenu(ID_BOT, status_actual, mensaje);		
-		} else {
-			
-			//siguiente_estado = await getSiguienteEstado(ID_BOT, status_actual);		
+			status_actual = await getAccionDeOpcionMenu(ID_BOT, status_actual, mensaje);	
+			status_anterior = status_actual;
+		} else {			
+			siguiente_estado = await getSiguienteEstado(ID_BOT, status_actual);		
 		}
 //		console.log('🎫 Estado secuenciado -> ', siguiente_estado);
 /*		
