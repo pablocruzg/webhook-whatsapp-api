@@ -114,7 +114,6 @@ app.post('/', async (req, res) => {
 			siguiente_estado = await getSiguienteEstado(ID_BOT, status_actual);		
 		}
 		console.log('🎫 Estado secuenciado -> ', siguiente_estado);
-*/
 
 		// 🔄 Obtener siguiente estado
 		let siguienteEstado = await getSiguienteEstado(ID_BOT, status_actual);
@@ -123,9 +122,10 @@ app.post('/', async (req, res) => {
 			console.log('⚠️ No hay siguiente estado');
 			return;
 		}
+*/
 
-		// 🎯 Obtener acción del nuevo estado
-		let accion = await getAccionByEstado(ID_BOT, siguienteEstado);
+		// 🎯 Obtener acción del estado actualizado
+		let accion = await getAccionByEstado(ID_BOT, status_actual);
 
 		if (!accion) {
 			console.log('⚠️ No hay acción definida');
