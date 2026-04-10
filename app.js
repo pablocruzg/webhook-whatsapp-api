@@ -114,6 +114,7 @@ app.post('/', async (req, res) => {
 			siguiente_estado = await getSiguienteEstado(ID_BOT, status_actual);		
 		}
 		console.log('🎫 Estado secuenciado -> ', siguiente_estado);
+*/
 
 		// 🔄 Obtener siguiente estado
 		let siguienteEstado = await getSiguienteEstado(ID_BOT, status_actual);
@@ -130,7 +131,6 @@ app.post('/', async (req, res) => {
 			console.log('⚠️ No hay acción definida');
 			return;
 		}
-*/
 
 		await sendWhatsAppMessage(telefono, accion.mensaje_accion);
 
