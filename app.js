@@ -124,20 +124,17 @@ app.post('/', async (req, res) => {
 		}
 */
 
-		// 🎯 Obtener acción del estado actualizado
+		// 🎯 Obtener acción del estado actual
 		let accion = await getAccionByEstado(ID_BOT, status_actual);
-
 		if (!accion) {
 			console.log('⚠️ No hay acción definida');
 			return;
 		}
-
 		await sendWhatsAppMessage(telefono, accion.mensaje_accion);
-
-		console.log('📤 Mensaje enviado a WhatsApp');
+		console.log('📤 Acción de estado actual enviada.');
 		
 		// Obtener opciones del menu
-		const opciones = await getOpciones(ID_BOT, siguiente_estado);
+		const opciones = await getOpciones(ID_BOT, status_actual);
 		if (!opciones.length) {
 			console.log('⚠️ No hay opciones');
 			return;
