@@ -81,7 +81,7 @@ app.post('/', async (req, res) => {
 		if (cliente) {
 			if(cliente.status_actual==0){
 				//conversacion = 2; // luego lo mejoramos
-				await conversacion = await getSiguienteConversacion();
+				conversacion = await getSiguienteConversacion();
 				status_actual = await getSiguienteEstado(ID_BOT, 0);			
 				status_anterior = 0;
 				console.log('🆕 Cliente recuperado');
