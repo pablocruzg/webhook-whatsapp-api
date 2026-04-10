@@ -53,9 +53,8 @@ app.post('/', async (req, res) => {
   res.status(200).end(); // ⚡ responder inmediato (como PHP)
 
   try {
-	 const ID_BOT =2; // ajusta si tienes varios bots
-   const body = req.body;
-
+		const ID_BOT =2; // ajusta si tienes varios bots
+		const body = req.body;
     const msg = body.entry?.[0]?.changes?.[0]?.value?.messages?.[0];
     const contact = body.entry?.[0]?.changes?.[0]?.value?.contacts?.[0];
 
@@ -64,41 +63,33 @@ app.post('/', async (req, res) => {
     let telefono = msg.from;
     const nombre = contact?.profile?.name || 'Sin nombre';
     const mensaje = msg.text?.body || '';
-
     // 🔧 Ajuste de numero de teléfono
     if (telefono.startsWith('52147')) {
       telefono = '5247' + telefono.slice(5);
     }
-
     const fecha = new Date().toISOString().slice(0, 19).replace('T', ' ');
-
     console.log('📩 Mensaje:', mensaje);
 
-
-
 		let cliente = await findCliente(telefono);
-
 		let status_actual;
+		let status_anterior;
 		let conversacion;
 		
 		if (cliente) {
 			status_actual = cliente.status_actual;
+			status_anterior = cliente.status_anterior;
 			conversacion = cliente.ultima_conversacion;
 		} else {
 			// 🔢 Obtener nueva conversación (simple por ahora)
 			conversacion = 1; // luego lo mejoramos
-
 			await addCliente(telefono, nombre, fecha, conversacion);
-
 			status_actual = 0;
-
+			status_anterior = 0;
 			console.log('🆕 Cliente creado');
 		}		
-		
-		
+				
 		const siguiente_estado = await getSiguienteEstado(ID_BOT, status_actual);		
-		
-		
+				
 		await updateCliente(
 			telefono,
 			status_actual,   // por ahora no cambia
@@ -108,16 +99,8 @@ app.post('/', async (req, res) => {
 		);
 		console.log('🔄 Cliente actualizado');
 
-
-
-
-
-
     await addMessage(1, nombre, telefono, fecha, mensaje, 'E');
     console.log('✅ Guardado en MySQL');
-
-
-
 
 		// 🔄 Obtener siguiente estado
 		let siguienteEstado = await getSiguienteEstado(ID_BOT, status_actual);
@@ -140,42 +123,27 @@ app.post('/', async (req, res) => {
 		console.log('📤 Mensaje enviado a WhatsApp');
 		
 		
+		// Obtener opciones del menu
+		const opciones = await getOpciones(ID_BOT, siguiente_estado);
+		if (!opciones.length) {
+			console.log('⚠️ No hay opciones');
+			return;
+		}
+		// 📋 Construir menú
+		let menu = 'Selecciona una opción:\n';
+		opciones.forEach((op, index) => {
+			menu += `${index + 1} - ${op.nombre}\n`;
+		});
+		if (opciones.length>1) {
+			await sendWhatsAppMessage(telefono, menu);
+			console.log('📤 Menú enviado');		
+		}
 		
-const opciones = await getOpciones(ID_BOT, siguiente_estado);
-
-if (!opciones.length) {
-  console.log('⚠️ No hay opciones');
-  return;
-}
-
-// 📋 Construir menú
-let menu = 'Selecciona una opción:\n';
-
-opciones.forEach((op, index) => {
-  menu += `${index + 1} - ${op.nombre}\n`;
-});
-
-
-if (opciones.length>1) {
-await sendWhatsAppMessage(telefono, menu);
-
-console.log('📤 Menú enviado');		
-}
-
-		
-		
-		
-
+		// Agregar mensaje a Base de Datos
 		await addMessage(conversacion, nombre, telefono, fecha, accion.mensaje_accion, 'S');
-				
-				
-
-
-
+		
 		// 🤖 Mostrar respuesta
 		console.log('🤖 Respuesta:', accion.mensaje_accion);
-
-
 
 		// 🔄 Actualizar cliente
 		await updateCliente(
@@ -187,9 +155,6 @@ console.log('📤 Menú enviado');
 		);
 
 		console.log('🔄 Estado actualizado');
-		
-
-
 
   } catch (err) {
     console.error('❌ Error:', err.message);
@@ -197,12 +162,11 @@ console.log('📤 Menú enviado');
 
 
 
-
+/*
   const timestamp = new Date().toISOString().replace('T', ' ').slice(0, 19);
-
   console.log(`\n\nWebhook received ${timestamp}\n`);
   console.log(JSON.stringify(req.body, null, 2));
-
+*/
 });
 
 app.listen(port, () => {
