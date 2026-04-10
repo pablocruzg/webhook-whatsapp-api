@@ -131,7 +131,7 @@ app.post('/', async (req, res) => {
 		// 🎯 Obtener acción del estado actual
 		let accion = await getAccionByEstado(ID_BOT, status_actual);
 		if (!accion) {
-			console.log('⚠️ No hay acción definida');
+			console.log('⚠️ No hay acción definida para status actual ', status_actual);
 			return;
 		}
 		await sendWhatsAppMessage(telefono, accion.mensaje_accion);
@@ -162,8 +162,8 @@ app.post('/', async (req, res) => {
 		// 🔄 Actualizar cliente
 		await updateCliente(
 			telefono,
-			siguiente_estado,
 			status_actual,
+			status_anterior,
 			fecha,
 			conversacion
 		);
