@@ -90,6 +90,9 @@ app.post('/', async (req, res) => {
 			console.log('🆕 Cliente creado');
 		}		
 		
+		//Identificar si es respuesta de Opcion-Menu o Texto Input
+		let respuestaMenu = await esMenu(ID_BOT, status_anterior);
+		console.log('🔄 Es respuesta de menu:', respuestaMenu, status_actual, ' - ',status_anterior);
 		
 //		let siguiente_estado;
 		if (respuestaMenu) {
@@ -120,9 +123,6 @@ app.post('/', async (req, res) => {
 		);
 		console.log('🎚 Cliente actualizado');
 		
-		//Identificar si es respuesta de Opcion-Menu o Texto Input
-		let respuestaMenu = await esMenu(ID_BOT, status_anterior);
-		console.log('🔄 Es respuesta de menu:', respuestaMenu, status_actual, ' - ',status_anterior);
 
     await addMessage(1, nombre, telefono, fecha, mensaje, 'E');
     console.log('✅ Guardado en MySQL');
