@@ -84,7 +84,8 @@ app.post('/', async (req, res) => {
 			// 🔢 Obtener nueva conversación (simple por ahora)
 			conversacion = 1; // luego lo mejoramos
 			await addCliente(telefono, nombre, fecha, conversacion);
-			status_actual = 0;
+			//status_actual = 0;
+		  status_actual = await getSiguienteEstado(ID_BOT, 0);			
 			status_anterior = 0;
 			console.log('🆕 Cliente creado');
 		}		
