@@ -159,6 +159,10 @@ app.post('/', async (req, res) => {
 		console.log('🤖 Respuesta:', accion.mensaje_accion);
 
 		// 🔄 Actualizar cliente
+		if(accion.cierra_conversacion==='S'){
+			status_actual=0;
+			status_siguiente=0;
+		}
 		await updateCliente(
 			telefono,
 			status_siguiente,
