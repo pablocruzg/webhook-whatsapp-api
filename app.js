@@ -17,6 +17,7 @@ const { sendWhatsAppMessage } = require('./models/whatsapp');
 		const { esMenu } = require('./models/secuencias');
 		const { getAccionDeOpcionMenu } = require('./models/secuencias');
 		const { getAccionByEstado } = require('./models/acciones');
+		const { getSiguienteConversacion } = require('./models/conversaciones');
 
 // GET
 app.get('/', (req, res) => {
@@ -79,7 +80,8 @@ app.post('/', async (req, res) => {
 		
 		if (cliente) {
 			if(cliente.status_actual==0){
-				conversacion = 2; // luego lo mejoramos
+				//conversacion = 2; // luego lo mejoramos
+				conversacion = getSiguienteConversacion();
 				status_actual = await getSiguienteEstado(ID_BOT, 0);			
 				status_anterior = 0;
 				console.log('🆕 Cliente recuperado');
@@ -90,7 +92,8 @@ app.post('/', async (req, res) => {
 			}
 		} else {
 			// 🔢 Obtener nueva conversación (simple por ahora)
-			conversacion = 1; // luego lo mejoramos
+			//conversacion = 1; // luego lo mejoramos
+			conversacion = getSiguienteConversacion();
 			await addCliente(telefono, nombre, fecha, conversacion);
 			status_actual = await getSiguienteEstado(ID_BOT, 0);			
 			status_anterior = 0;
@@ -107,19 +110,7 @@ app.post('/', async (req, res) => {
 			//status_anterior = status_actual;
 		} else {			
 			status_siguiente = await getSiguienteEstado(ID_BOT, status_actual);		
-		}
-//		console.log('🎫 Estado secuenciado -> ', status_siguiente);
-/*		
-
-		// 🔄 Obtener siguiente estado
-		let siguienteEstado = await getSiguienteEstado(ID_BOT, status_actual);
-
-		if (!siguienteEstado) {
-			console.log('⚠️ No hay siguiente estado');
-			return;
-		}
-*/		
-		
+		}	
 				
 		await updateCliente(
 			telefono,
