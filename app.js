@@ -99,6 +99,7 @@ app.post('/', async (req, res) => {
 			status_anterior = 0;
 			console.log('🆕 Cliente creado');
 		}		
+    console.log('📩 Conversacion:', conversacion);
 		
 		//Identificar si es respuesta de Opcion-Menu o Texto Input
 		let respuestaMenu = await esMenu(ID_BOT, status_anterior);
