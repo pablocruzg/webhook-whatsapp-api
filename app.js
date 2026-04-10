@@ -157,9 +157,10 @@ app.post('/', async (req, res) => {
 		
 		// 🤖 Mostrar respuesta
 		console.log('🤖 Respuesta:', accion.mensaje_accion);
+		console.log('cierra_conversacion:', accion.cierra_conversacion);
 
 		// 🔄 Actualizar cliente
-		if(accion.cierra_conversacion==='S'){
+		if(accion.cierra_conversacion=='S'){
 			status_actual=0;
 			status_siguiente=0;
 		}
