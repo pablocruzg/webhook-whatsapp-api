@@ -94,7 +94,7 @@ app.post('/', async (req, res) => {
 		await updateCliente(
 			telefono,
 			status_actual,   // por ahora no cambia
-			status_actual,   // anterior = mismo valor (temporal)
+			status_anterior,   // anterior = mismo valor (temporal)
 			fecha,
 			conversacion
 		);
@@ -115,7 +115,7 @@ app.post('/', async (req, res) => {
     console.log('✅ Guardado en MySQL');
 
 		// 🔄 Obtener siguiente estado
-//		let siguienteEstado = await getSiguienteEstado(ID_BOT, status_actual);
+		let siguienteEstado = await getSiguienteEstado(ID_BOT, status_actual);
 
 		if (!siguienteEstado) {
 			console.log('⚠️ No hay siguiente estado');
@@ -133,7 +133,6 @@ app.post('/', async (req, res) => {
 		await sendWhatsAppMessage(telefono, accion.mensaje_accion);
 
 		console.log('📤 Mensaje enviado a WhatsApp');
-		
 		
 		// Obtener opciones del menu
 		const opciones = await getOpciones(ID_BOT, siguiente_estado);
