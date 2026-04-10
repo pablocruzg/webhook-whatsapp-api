@@ -103,7 +103,7 @@ app.post('/', async (req, res) => {
 		//Identificar si es respuesta de Opcion-Menu o Texto Input
 		let respuestaMenu = await esMenu(ID_BOT, status_anterior);
 		console.log('🔄 Es respuesta de menu:', respuestaMenu, status_actual, ' - ',status_anterior);
-		const siguiente_estado;
+		let siguiente_estado;
 		if (respuestaMenu) {
 			siguiente_estado = await getAccionDeOpcionMenu(ID_BOT, status_anterior, mensaje);		
 		} else {
