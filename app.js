@@ -85,8 +85,7 @@ app.post('/', async (req, res) => {
 			// 🔢 Obtener nueva conversación (simple por ahora)
 			conversacion = 1; // luego lo mejoramos
 			await addCliente(telefono, nombre, fecha, conversacion);
-			//status_actual = 0;
-		  status_actual = await getSiguienteEstado(ID_BOT, 0);			
+			status_actual = await getSiguienteEstado(ID_BOT, 0);			
 			status_anterior = 0;
 			console.log('🆕 Cliente creado');
 		}		
@@ -103,6 +102,11 @@ app.post('/', async (req, res) => {
 		//Identificar si es respuesta de Opcion-Menu o Texto Input
 		let respuestaMenu = await esMenu(ID_BOT, status_anterior);
 		console.log('🔄 Es respuesta de menu:', respuestaMenu, status_actual, ' - ',status_anterior);
+
+    await addMessage(1, nombre, telefono, fecha, mensaje, 'E');
+    console.log('✅ Guardado en MySQL');
+
+/*		
 		let siguiente_estado;
 		if (respuestaMenu) {
 			siguiente_estado = await getAccionDeOpcionMenu(ID_BOT, status_anterior, mensaje);		
@@ -110,9 +114,6 @@ app.post('/', async (req, res) => {
 			siguiente_estado = await getSiguienteEstado(ID_BOT, status_actual);		
 		}
 		console.log('🎫 Estado secuenciado -> ', siguiente_estado);
-
-    await addMessage(1, nombre, telefono, fecha, mensaje, 'E');
-    console.log('✅ Guardado en MySQL');
 
 		// 🔄 Obtener siguiente estado
 		let siguienteEstado = await getSiguienteEstado(ID_BOT, status_actual);
@@ -129,6 +130,7 @@ app.post('/', async (req, res) => {
 			console.log('⚠️ No hay acción definida');
 			return;
 		}
+*/
 
 		await sendWhatsAppMessage(telefono, accion.mensaje_accion);
 
