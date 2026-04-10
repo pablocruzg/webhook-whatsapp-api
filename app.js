@@ -89,6 +89,27 @@ app.post('/', async (req, res) => {
 			status_anterior = 0;
 			console.log('🆕 Cliente creado');
 		}		
+		
+		
+//		let siguiente_estado;
+		if (respuestaMenu) {
+			status_actual = await getAccionDeOpcionMenu(ID_BOT, status_actual, mensaje);		
+		} else {
+			
+			//siguiente_estado = await getSiguienteEstado(ID_BOT, status_actual);		
+		}
+//		console.log('🎫 Estado secuenciado -> ', siguiente_estado);
+/*		
+
+		// 🔄 Obtener siguiente estado
+		let siguienteEstado = await getSiguienteEstado(ID_BOT, status_actual);
+
+		if (!siguienteEstado) {
+			console.log('⚠️ No hay siguiente estado');
+			return;
+		}
+*/		
+		
 				
 		await updateCliente(
 			telefono,
@@ -105,24 +126,6 @@ app.post('/', async (req, res) => {
 
     await addMessage(1, nombre, telefono, fecha, mensaje, 'E');
     console.log('✅ Guardado en MySQL');
-
-/*		
-		let siguiente_estado;
-		if (respuestaMenu) {
-			siguiente_estado = await getAccionDeOpcionMenu(ID_BOT, status_anterior, mensaje);		
-		} else {
-			siguiente_estado = await getSiguienteEstado(ID_BOT, status_actual);		
-		}
-		console.log('🎫 Estado secuenciado -> ', siguiente_estado);
-
-		// 🔄 Obtener siguiente estado
-		let siguienteEstado = await getSiguienteEstado(ID_BOT, status_actual);
-
-		if (!siguienteEstado) {
-			console.log('⚠️ No hay siguiente estado');
-			return;
-		}
-*/
 
 		// 🎯 Obtener acción del estado actual
 		let accion = await getAccionByEstado(ID_BOT, status_actual);
