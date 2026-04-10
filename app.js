@@ -94,15 +94,14 @@ app.post('/', async (req, res) => {
 		let respuestaMenu = await esMenu(ID_BOT, status_anterior);
 		console.log('🔄 Es respuesta de menu:', respuestaMenu, status_actual, ' - ',status_anterior);
 		
-		let siguiente_estado;
+		let status_siguiente;
 		if (respuestaMenu) {
-			status_actual = await getAccionDeOpcionMenu(ID_BOT, status_actual, mensaje);	
-			status_anterior = status_actual;
-			siguiente_estado = 0;
+			status_siguiente = await getAccionDeOpcionMenu(ID_BOT, status_actual, mensaje);	
+			//status_anterior = status_actual;
 		} else {			
-			siguiente_estado = await getSiguienteEstado(ID_BOT, status_actual);		
+			status_siguiente = await getSiguienteEstado(ID_BOT, status_actual);		
 		}
-//		console.log('🎫 Estado secuenciado -> ', siguiente_estado);
+//		console.log('🎫 Estado secuenciado -> ', status_siguiente);
 /*		
 
 		// 🔄 Obtener siguiente estado
@@ -162,8 +161,8 @@ app.post('/', async (req, res) => {
 		// 🔄 Actualizar cliente
 		await updateCliente(
 			telefono,
+			status_siguiente,
 			status_actual,
-			status_anterior,
 			fecha,
 			conversacion
 		);
