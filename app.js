@@ -77,7 +77,7 @@ app.post('/', async (req, res) => {
 		let status_actual;
 		let status_anterior;
 		let conversacion;
-		
+		//-------------------------------------------------------------------------------------------------------------
 		if (cliente) {
 			if(cliente.status_actual==0){
 				//conversacion = 2; // luego lo mejoramos
@@ -91,8 +91,6 @@ app.post('/', async (req, res) => {
 				conversacion = await cliente.ultima_conversacion;
 			}
 		} else {
-			// 🔢 Obtener nueva conversación (simple por ahora)
-			//conversacion = 1; // luego lo mejoramos
 			conversacion = await getSiguienteConversacion();
 			await addCliente(telefono, nombre, fecha, conversacion);
 			status_actual = await getSiguienteEstado(ID_BOT, 0);			
@@ -113,6 +111,7 @@ app.post('/', async (req, res) => {
 			status_actual = await getAccionDeOpcionMenu(ID_BOT, status_anterior, mensaje);	
 			console.log('status_siguiente =',status_siguiente);
 			//status_anterior = status_actual;
+			status_siguiente = await getSiguienteEstado(ID_BOT, status_actual);		
 		} else {			
 			status_siguiente = await getSiguienteEstado(ID_BOT, status_actual);		
 		}	
@@ -175,7 +174,7 @@ app.post('/', async (req, res) => {
 		);
 
 		console.log('🔄 Estado actualizado');
-
+//----------------------------------------------------------------------------------
   } catch (err) {
     console.error('❌ Error:', err.message);
   }
