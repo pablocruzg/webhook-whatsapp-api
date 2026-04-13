@@ -112,6 +112,8 @@ app.post('/', async (req, res) => {
 			status_siguiente = await getSiguienteEstado(ID_BOT, status_actual);		
 			*/
 			if (!/^\d+$/.test(mensaje)) {
+					let accion = await getAccionByEstado(ID_BOT, status_actual);
+					await sendWhatsAppMessage(telefono, accion.mensaje_accion);
 					console.log('❌ No es número');
 					return;
 			}
