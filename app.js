@@ -118,7 +118,7 @@ app.post('/', async (req, res) => {
 
 			const opcion = Number(mensaje);
 
-			if (!(await opcionValida(ID_BOT, status_anterior, opcion))) {
+			if (!(await getAccionDeOpcionMenu(ID_BOT, status_anterior, opcion))) {
 					console.log('❌ Opción no existe en el menú');
 					return;
 			}
