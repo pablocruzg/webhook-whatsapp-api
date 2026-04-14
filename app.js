@@ -75,33 +75,26 @@ app.post('/', async (req, res) => {
 
 		let cliente = await findCliente(telefono);
 		let status_actual;
-		let status_actual_origen;
 		let status_anterior;
-		let status_anterior_origen;
 		let conversacion;
 		//-------------------------------------------------------------------------------------------------------------
 		if (cliente) {
 			if(cliente.status_actual==0){
+				//conversacion = 2; // luego lo mejoramos
 				conversacion = await getSiguienteConversacion();
-				status_actual = await getSiguienteEstado(ID_BOT, 0);	
-				status_actual_origen = 0;
+				status_actual = await getSiguienteEstado(ID_BOT, 0);			
 				status_anterior = 0;
-				status_anterior_origen = status_anterior;
 				console.log('🆕 Cliente recuperado');
 			} else {
 				status_actual = cliente.status_actual;
-				status_actual_origen = status_actual;
 				status_anterior = cliente.status_anterior;
-				status_anterior_origen = status_anterior;
 				conversacion = await cliente.ultima_conversacion;
 			}
 		} else {
 			conversacion = await getSiguienteConversacion();
 			await addCliente(telefono, nombre, fecha, conversacion);
 			status_actual = await getSiguienteEstado(ID_BOT, 0);			
-			status_actual_origen = 0;
 			status_anterior = 0;
-			status_anterior_origen = status_anterior;
 			console.log('🆕 Cliente creado');
 		}		
     console.log('📩 Conversacion:', conversacion);
@@ -119,28 +112,16 @@ app.post('/', async (req, res) => {
 			status_siguiente = await getSiguienteEstado(ID_BOT, status_actual);		
 			*/
 			if (!/^\d+$/.test(mensaje)) {
-							await updateCliente(
-																		telefono,
-																		status_actual_origen,   // por ahora no cambia
-																		status_anterior_origen,   // anterior = mismo valor (temporal)
-																		fecha,
-																		conversacion
-																	);
-					console.log('❌ No es número ',status_actual_origen,' - ', status_anterior_origen);
+					await sendWhatsAppMessage(telefono, 'Ingrese una opcion válida.');
+					console.log('❌ No es número');
 					return;
 			}
 
 			const opcion = Number(mensaje);
 
 			if (!(await getAccionDeOpcionMenu(ID_BOT, status_anterior, opcion))) {
-							await updateCliente(
-																		telefono,
-																		status_actual_origen,   // por ahora no cambia
-																		status_anterior_origen,   // anterior = mismo valor (temporal)
-																		fecha,
-																		conversacion
-																	);				
-					console.log('❌ Opción no existe en el menú ',status_actual_origen,' - ', status_anterior_origen);
+					await sendWhatsAppMessage(telefono, 'Ingrese una opcion válida.');
+					console.log('❌ Opción no existe en el menú');
 					return;
 			}
 
