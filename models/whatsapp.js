@@ -35,7 +35,7 @@ async function sendWhatsAppMessage(to, message) {
 async function sendWhatsAppImages(to, ruta) {
   const images = await getImages(ruta);
 
-  await sendText(to, `📸 Promociones de ${categoria}:`);
+  await sendWhatsAppMessage(to, `📸 Promociones de ${categoria}:`);
 
   for (const img of images.slice(0, 5)) {
     await axios.post(
