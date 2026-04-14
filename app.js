@@ -75,25 +75,33 @@ app.post('/', async (req, res) => {
 
 		let cliente = await findCliente(telefono);
 		let status_actual;
+		let status_actual_origen;
 		let status_anterior;
+		let status_anterior_origen;
 		let conversacion;
 		//-------------------------------------------------------------------------------------------------------------
 		if (cliente) {
 			if(cliente.status_actual==0){
 				conversacion = await getSiguienteConversacion();
-				status_actual = await getSiguienteEstado(ID_BOT, 0);			
+				status_actual = await getSiguienteEstado(ID_BOT, 0);	
+				status_actual_origen = 0;
 				status_anterior = 0;
+				status_anterior_origen = status_anterior;
 				console.log('🆕 Cliente recuperado');
 			} else {
 				status_actual = cliente.status_actual;
+				status_actual_origen = status_actual;
 				status_anterior = cliente.status_anterior;
+				status_anterior_origen = status_anterior;
 				conversacion = await cliente.ultima_conversacion;
 			}
 		} else {
 			conversacion = await getSiguienteConversacion();
 			await addCliente(telefono, nombre, fecha, conversacion);
 			status_actual = await getSiguienteEstado(ID_BOT, 0);			
+			status_actual_origen = 0;
 			status_anterior = 0;
+			status_anterior_origen = status_anterior;
 			console.log('🆕 Cliente creado');
 		}		
     console.log('📩 Conversacion:', conversacion);
@@ -113,8 +121,8 @@ app.post('/', async (req, res) => {
 			if (!/^\d+$/.test(mensaje)) {
 							await updateCliente(
 																		telefono,
-																		status_anterior,   // por ahora no cambia
-																		status_anterior,   // anterior = mismo valor (temporal)
+																		status_actual_origen,   // por ahora no cambia
+																		status_anterior_origen,   // anterior = mismo valor (temporal)
 																		fecha,
 																		conversacion
 																	);
