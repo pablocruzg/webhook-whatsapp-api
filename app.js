@@ -12,6 +12,7 @@ const {
   updateCliente
 } = require('./models/clientes');
 const { sendWhatsAppMessage } = require('./models/whatsapp');
+const { sendWhatsAppImages }  = require('./models/whatsapp');
 		const { getSiguienteEstado } = require('./models/secuencias');
 		const { getOpciones } = require('./models/secuencias');
 		const { esMenu } = require('./models/secuencias');
