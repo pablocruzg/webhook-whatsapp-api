@@ -18,6 +18,7 @@ const { sendWhatsAppMessage } = require('./models/whatsapp');
 		const { getAccionDeOpcionMenu } = require('./models/secuencias');
 		const { getAccionByEstado } = require('./models/acciones');
 		const { getSiguienteConversacion } = require('./models/conversaciones');
+		const { upsertCampoEnTabla } = require('./models/campos_en_tablas.js');
 
 // GET
 app.get('/', (req, res) => {
