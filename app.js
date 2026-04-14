@@ -80,7 +80,6 @@ app.post('/', async (req, res) => {
 		//-------------------------------------------------------------------------------------------------------------
 		if (cliente) {
 			if(cliente.status_actual==0){
-				//conversacion = 2; // luego lo mejoramos
 				conversacion = await getSiguienteConversacion();
 				status_actual = await getSiguienteEstado(ID_BOT, 0);			
 				status_anterior = 0;
@@ -112,8 +111,13 @@ app.post('/', async (req, res) => {
 			status_siguiente = await getSiguienteEstado(ID_BOT, status_actual);		
 			*/
 			if (!/^\d+$/.test(mensaje)) {
-					let accion = await getAccionByEstado(ID_BOT, status_actual);
-					await sendWhatsAppMessage(telefono, accion.mensaje_accion);
+							await updateCliente(
+																		telefono,
+																		status_anterior,   // por ahora no cambia
+																		status_anterior,   // anterior = mismo valor (temporal)
+																		fecha,
+																		conversacion
+																	);
 					console.log('❌ No es número');
 					return;
 			}
