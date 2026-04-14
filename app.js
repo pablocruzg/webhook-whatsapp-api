@@ -126,7 +126,7 @@ app.post('/', async (req, res) => {
 																		fecha,
 																		conversacion
 																	);
-					console.log('❌ No es número');
+					console.log('❌ No es número ',status_actual_origen,' - ', status_anterior_origen);
 					return;
 			}
 
@@ -140,7 +140,7 @@ app.post('/', async (req, res) => {
 																		fecha,
 																		conversacion
 																	);				
-					console.log('❌ Opción no existe en el menú');
+					console.log('❌ Opción no existe en el menú ',status_actual_origen,' - ', status_anterior_origen);
 					return;
 			}
 
