@@ -62,7 +62,7 @@ async function sendWhatsAppImages(to, ruta) {
 
 async function getImages(ruta) {
   const { data } = await axios.get(
-    `https://www.asesoria-web.com.mx/promociones/listar_imagenes.php?ruta=${ruta}`
+    `https://www.asesoria-web.com.mx/public/promociones/listar_imagenes.php?ruta=${ruta}`
   );
 
   return data;
