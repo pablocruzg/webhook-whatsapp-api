@@ -20,7 +20,7 @@ const { sendWhatsAppMessage } = require('./models/whatsapp');
 		const { getSiguienteConversacion } = require('./models/conversaciones');
 		const { upsertCampoEnTabla } = require('./models/campos_en_tablas.js');
 
-// GET
+// GET Verifica Token de WebHook
 app.get('/', (req, res) => {
   const mode = req.query['hub.mode'];
   const token = req.query['hub.verify_token'];
@@ -129,14 +129,14 @@ app.post('/', async (req, res) => {
 		} else {		
 			accion_anterior = await getAccionByEstado(ID_BOT, status_anterior);
 			if (!accion_anterior) {
-					console.log('🟢 Primer estado: no hay acción anterior');
+//					console.log('🟢 Primer estado: no hay acción anterior');
 			} 
 			else if(accion_anterior.campo)
 			{
-				console.log('⚠️ Guardar valor de campo ', conversacion, ' - ', telefono, ' - ' , nombre, ' - ' , fecha, ' - ', accion_anterior.campo, ' - ', accion_anterior.tabla, ' - ', mensaje);
+//				console.log('⚠️ Guardar valor de campo ', conversacion, ' - ', telefono, ' - ' , nombre, ' - ' , fecha, ' - ', accion_anterior.campo, ' - ', accion_anterior.tabla, ' - ', mensaje);
 				ioresult = await upsertCampoEnTabla(conversacion, telefono, nombre, fecha, accion_anterior.tabla, accion_anterior.campo, mensaje);
 			} else {
-				console.log('No es campo input.');
+//				console.log('No es campo input.');
 			}
 			status_siguiente = await getSiguienteEstado(ID_BOT, status_actual);		
 		}	
@@ -148,10 +148,10 @@ app.post('/', async (req, res) => {
 			fecha,
 			conversacion
 		);
-		console.log('🎚 Cliente actualizado');
+//		console.log('🎚 Cliente actualizado');
 
-    await addMessage(1, nombre, telefono, fecha, mensaje, 'E');
-    console.log('✅ Guardado en MySQL');
+    await addMessage(conversacion, nombre, telefono, fecha, mensaje, 'E');
+//    console.log('✅ Guardado en MySQL');
 
 		// 🎯 Obtener acción del estado actual
 		accion = await getAccionByEstado(ID_BOT, status_actual);
@@ -160,12 +160,12 @@ app.post('/', async (req, res) => {
 			return;
 		}
 		await sendWhatsAppMessage(telefono, accion.mensaje_accion);
-		console.log('📤 Acción de estado actual enviada.');
+//		console.log('📤 Acción de estado actual enviada.');
 		
 		// Obtener opciones del menu
 		const opciones = await getOpciones(ID_BOT, status_actual);
 		if (!opciones.length) {
-			console.log('⚠️ No hay opciones');
+//			console.log('⚠️ No hay opciones');
 //			return;
 		}
 		// 📋 Construir menú
@@ -182,8 +182,8 @@ app.post('/', async (req, res) => {
 		await addMessage(conversacion, nombre, telefono, fecha, accion.mensaje_accion, 'S');
 		
 		// 🤖 Mostrar respuesta
-		console.log('🤖 Respuesta:', accion.mensaje_accion);
-		console.log('cierra_conversacion:', accion.cierra_conversacion);
+//		console.log('🤖 Respuesta:', accion.mensaje_accion);
+//		console.log('cierra_conversacion:', accion.cierra_conversacion);
 
 		// 🔄 Actualizar cliente
 		if(accion.cierra_conversacion=='S'){
@@ -198,7 +198,7 @@ app.post('/', async (req, res) => {
 			conversacion
 		);
 
-		console.log('🔄 Estado actualizado');
+//		console.log('🔄 Estado actualizado');
 //----------------------------------------------------------------------------------
   } catch (err) {
     console.error('❌ Error:', err.message);
