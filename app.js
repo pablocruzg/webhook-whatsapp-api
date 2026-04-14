@@ -159,6 +159,11 @@ app.post('/', async (req, res) => {
 			console.log('⚠️ No hay acción definida para status actual ', status_actual);
 			return;
 		}
+		
+		if(accion.enviar_imagen){
+			console.log('📤Enviar imagen ', accion.enviar_imagen);
+		}
+		
 		await sendWhatsAppMessage(telefono, accion.mensaje_accion);
 //		console.log('📤 Acción de estado actual enviada.');
 		

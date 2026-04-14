@@ -32,4 +32,43 @@ async function sendWhatsAppMessage(to, message) {
   }
 }
 
-module.exports = { sendWhatsAppMessage };
+async function enviarCatalogo(to, categoria) {
+  const images = await getImages(categoria);
+
+  await sendText(to, `📸 Promociones de ${categoria}:`);
+
+  for (const img of images.slice(0, 5)) {
+    await axios.post(
+      `https://graph.facebook.com/v18.0/${PHONE_ID}/messages`,
+      {
+        messaging_product: "whatsapp",
+        to,
+        type: "image",
+        image: {
+          link: img.url
+        }
+      },
+      {
+        headers: {
+          Authorization: `Bearer ${TOKEN}`,
+          "Content-Type": "application/json"
+        }
+      }
+    );
+
+    await new Promise(r => setTimeout(r, 600));
+  }
+}
+
+const axios = require('axios');
+
+async function getImages(categoria) {
+  const { data } = await axios.get(
+    `https://www.asesoria-web.com.mx/promociones/listar_imagenes.php?categoria=${categoria}`
+  );
+
+  return data;
+}
+
+module.exports = { sendWhatsAppMessage,
+									 sendWhatsAppImages	};
