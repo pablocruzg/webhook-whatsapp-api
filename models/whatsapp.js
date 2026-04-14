@@ -32,7 +32,7 @@ async function sendWhatsAppMessage(to, message) {
   }
 }
 
-async function enviarCatalogo(to, categoria) {
+async function sendWhatsAppImages(to, categoria) {
   const images = await getImages(categoria);
 
   await sendText(to, `📸 Promociones de ${categoria}:`);
