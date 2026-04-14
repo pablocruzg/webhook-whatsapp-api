@@ -128,7 +128,7 @@ app.post('/', async (req, res) => {
 			accion_anterior = await getAccionByEstado(ID_BOT, status_anterior);
 			if(accion_anterior.campo)
 			{
-				console.log('⚠️ Guardar valor de campo ', accion_anterior.campo, ' - ', accion_anterior.tabla);
+				console.log('⚠️ Guardar valor de campo ', accion_anterior.campo, ' - ', accion_anterior.tabla, ' - ', mensaje);
 			}
 			status_siguiente = await getSiguienteEstado(ID_BOT, status_actual);		
 		}	
