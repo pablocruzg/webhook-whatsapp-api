@@ -104,13 +104,8 @@ app.post('/', async (req, res) => {
 		console.log('🔄 Es respuesta de menu:', respuestaMenu, status_actual, ' - ',status_anterior);
 		
 		let status_siguiente;
+		let accion;
 		if (respuestaMenu) {
-			/*
-			console.log('status_actual = await getAccionDeOpcionMenu(',ID_BOT,',', status_anterior,',', mensaje,')');
-			status_actual = await getAccionDeOpcionMenu(ID_BOT, status_anterior, mensaje);	
-			console.log('status_siguiente =',status_siguiente);
-			status_siguiente = await getSiguienteEstado(ID_BOT, status_actual);		
-			*/
 			if (!/^\d+$/.test(mensaje)) {
 					await sendWhatsAppMessage(telefono, 'Ingrese una opcion válida.');
 					console.log('❌ No es número');
@@ -128,7 +123,12 @@ app.post('/', async (req, res) => {
 			// ✅ Opción válida
 			status_actual = await getAccionDeOpcionMenu(ID_BOT, status_anterior, opcion);
 			status_siguiente = await getSiguienteEstado(ID_BOT, status_actual);			
-		} else {			
+		} else {		
+			accion = await getAccionByEstado(ID_BOT, status_actual);
+			if(accion.campo)
+			{
+				console.log('⚠️ Guardar valor de campo ', accion.campom ' - ', accion.tabla);
+			}
 			status_siguiente = await getSiguienteEstado(ID_BOT, status_actual);		
 		}	
 				
@@ -145,7 +145,7 @@ app.post('/', async (req, res) => {
     console.log('✅ Guardado en MySQL');
 
 		// 🎯 Obtener acción del estado actual
-		let accion = await getAccionByEstado(ID_BOT, status_actual);
+		accion = await getAccionByEstado(ID_BOT, status_actual);
 		if (!accion) {
 			console.log('⚠️ No hay acción definida para status actual ', status_actual);
 			return;
