@@ -60,8 +60,6 @@ async function enviarCatalogo(to, categoria) {
   }
 }
 
-const axios = require('axios');
-
 async function getImages(categoria) {
   const { data } = await axios.get(
     `https://www.asesoria-web.com.mx/promociones/listar_imagenes.php?categoria=${categoria}`
