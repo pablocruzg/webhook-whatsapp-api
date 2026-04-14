@@ -32,8 +32,8 @@ async function sendWhatsAppMessage(to, message) {
   }
 }
 
-async function sendWhatsAppImages(to, categoria) {
-  const images = await getImages(categoria);
+async function sendWhatsAppImages(to, ruta) {
+  const images = await getImages(ruta);
 
   await sendText(to, `📸 Promociones de ${categoria}:`);
 
@@ -60,9 +60,9 @@ async function sendWhatsAppImages(to, categoria) {
   }
 }
 
-async function getImages(categoria) {
+async function getImages(ruta) {
   const { data } = await axios.get(
-    `https://www.asesoria-web.com.mx/promociones/listar_imagenes.php?categoria=${categoria}`
+    `https://www.asesoria-web.com.mx/promociones/listar_imagenes.php?ruta=${ruta}`
   );
 
   return data;

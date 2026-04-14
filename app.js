@@ -155,7 +155,7 @@ app.post('/', async (req, res) => {
 
 		// 🎯 Obtener acción del estado actual
 		accion = await getAccionByEstado(ID_BOT, status_actual);
-console.log(JSON.stringify(accion, null, 2));		
+//console.log(JSON.stringify(accion, null, 2));		
 		if (!accion) {
 			console.log('⚠️ No hay acción definida para status actual ', status_actual);
 			return;
@@ -163,8 +163,6 @@ console.log(JSON.stringify(accion, null, 2));
 		
 		if(accion.enviar_imagen){
 			console.log('💫 Enviar imagen ', accion.enviar_imagen);
-		}else{
-			console.log('💥 No hubo imagen ', accion.enviar_imagen);
 		}
 		
 		await sendWhatsAppMessage(telefono, accion.mensaje_accion);
