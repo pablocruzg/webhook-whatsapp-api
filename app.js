@@ -80,7 +80,6 @@ app.post('/', async (req, res) => {
 		//-------------------------------------------------------------------------------------------------------------
 		if (cliente) {
 			if(cliente.status_actual==0){
-				//conversacion = 2; // luego lo mejoramos
 				conversacion = await getSiguienteConversacion();
 				status_actual = await getSiguienteEstado(ID_BOT, 0);			
 				status_anterior = 0;
@@ -131,7 +130,7 @@ app.post('/', async (req, res) => {
 			} 
 			else if(accion_anterior.campo)
 			{
-				console.log('⚠️ Guardar valor de campo ', accion_anterior.campo, ' - ', accion_anterior.tabla, ' - ', mensaje);
+				console.log('⚠️ Guardar valor de campo ', conversacion, ' - ', telefono, ' - ' , nombre, ' - ' , fecha, ' - ', accion_anterior.campo, ' - ', accion_anterior.tabla, ' - ', mensaje);
 			} else {
 				console.log('No es campo input.');
 			}
