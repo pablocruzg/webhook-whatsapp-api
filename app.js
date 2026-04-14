@@ -105,6 +105,7 @@ app.post('/', async (req, res) => {
 		
 		let status_siguiente;
 		let accion;
+		let accion_anterior;
 		if (respuestaMenu) {
 			if (!/^\d+$/.test(mensaje)) {
 					await sendWhatsAppMessage(telefono, 'Ingrese una opcion válida.');
@@ -124,10 +125,10 @@ app.post('/', async (req, res) => {
 			status_actual = await getAccionDeOpcionMenu(ID_BOT, status_anterior, opcion);
 			status_siguiente = await getSiguienteEstado(ID_BOT, status_actual);			
 		} else {		
-			accion = await getAccionByEstado(ID_BOT, status_actual);
-			if(accion.campo)
+			accion_anterior = await getAccionByEstado(ID_BOT, status_anterior);
+			if(accion_anterior.campo)
 			{
-				console.log('⚠️ Guardar valor de campo ', accion.campo, ' - ', accion.tabla);
+				console.log('⚠️ Guardar valor de campo ', accion_anterior.campo, ' - ', accion_anterior.tabla);
 			}
 			status_siguiente = await getSiguienteEstado(ID_BOT, status_actual);		
 		}	
