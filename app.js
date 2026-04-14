@@ -155,6 +155,7 @@ app.post('/', async (req, res) => {
 
 		// 🎯 Obtener acción del estado actual
 		accion = await getAccionByEstado(ID_BOT, status_actual);
+console.log(JSON.stringify(accion[0], null, 2));		
 		if (!accion) {
 			console.log('⚠️ No hay acción definida para status actual ', status_actual);
 			return;
