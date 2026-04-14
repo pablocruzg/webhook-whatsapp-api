@@ -126,7 +126,10 @@ app.post('/', async (req, res) => {
 			status_siguiente = await getSiguienteEstado(ID_BOT, status_actual);			
 		} else {		
 			accion_anterior = await getAccionByEstado(ID_BOT, status_anterior);
-			if(accion_anterior.campo)
+			if (!accion_anterior) {
+					console.log('🟢 Primer estado: no hay acción anterior');
+			} 
+			else if(accion_anterior.campo)
 			{
 				console.log('⚠️ Guardar valor de campo ', accion_anterior.campo, ' - ', accion_anterior.tabla, ' - ', mensaje);
 			} else {
