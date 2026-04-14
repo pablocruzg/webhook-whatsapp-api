@@ -161,7 +161,9 @@ app.post('/', async (req, res) => {
 		}
 		
 		if(accion.enviar_imagen){
-			console.log('📤Enviar imagen ', accion.enviar_imagen);
+			console.log('💫 Enviar imagen ', accion.enviar_imagen);
+		}else{
+			console.log('💥 No hubo imagen ', accion.enviar_imagen);
 		}
 		
 		await sendWhatsAppMessage(telefono, accion.mensaje_accion);
