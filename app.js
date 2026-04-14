@@ -133,6 +133,13 @@ app.post('/', async (req, res) => {
 			const opcion = Number(mensaje);
 
 			if (!(await getAccionDeOpcionMenu(ID_BOT, status_anterior, opcion))) {
+							await updateCliente(
+																		telefono,
+																		status_actual_origen,   // por ahora no cambia
+																		status_anterior_origen,   // anterior = mismo valor (temporal)
+																		fecha,
+																		conversacion
+																	);				
 					console.log('❌ Opción no existe en el menú');
 					return;
 			}
