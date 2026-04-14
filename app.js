@@ -106,6 +106,8 @@ app.post('/', async (req, res) => {
 		let status_siguiente;
 		let accion;
 		let accion_anterior;
+		let ioresult;
+		
 		if (respuestaMenu) {
 			if (!/^\d+$/.test(mensaje)) {
 					await sendWhatsAppMessage(telefono, 'Ingrese una opcion válida.');
@@ -132,6 +134,7 @@ app.post('/', async (req, res) => {
 			else if(accion_anterior.campo)
 			{
 				console.log('⚠️ Guardar valor de campo ', conversacion, ' - ', telefono, ' - ' , nombre, ' - ' , fecha, ' - ', accion_anterior.campo, ' - ', accion_anterior.tabla, ' - ', mensaje);
+				ioresult = await upsertCampoEnTabla(conversacion, telefono, nombre, fecha_hora, accion_anterior.tabla, accion_anterior.campo, mensaje);
 			} else {
 				console.log('No es campo input.');
 			}
