@@ -6,17 +6,15 @@ app.use(express.json());
 const port = process.env.PORT || 3000;
 const verifyToken = process.env.VERIFY_TOKEN;
 const { addMessage } = require('./models/mensajes');
-const {
-  findCliente,
-  addCliente,
-  updateCliente
-} = require('./models/clientes');
-const { sendWhatsAppMessage } = require('./models/whatsapp');
-const { sendWhatsAppImages }  = require('./models/whatsapp');
-const { getSiguienteEstado } = require('./models/secuencias');
-const { getOpciones } = require('./models/secuencias');
-const { esMenu } = require('./models/secuencias');
-const { getAccionDeOpcionMenu } = require('./models/secuencias');
+const { findCliente,
+				addCliente,
+				updateCliente } = require('./models/clientes');
+const { sendWhatsAppMessage,
+				sendWhatsAppImages} = require('./models/whatsapp');
+const { getSiguienteEstado,
+				getOpciones,
+				esMenu,
+				getAccionDeOpcionMenu } = require('./models/secuencias');
 const { getAccionByEstado } = require('./models/acciones');
 const { getSiguienteConversacion } = require('./models/conversaciones');
 const { upsertCampoEnTabla } = require('./models/campos_en_tablas.js');
@@ -80,13 +78,8 @@ app.post('/', async (req, res) => {
 		let status_anterior;
 		let conversacion;
 		//-------------------------------------------------------------------------------------------------------------
-		
-		
 		const ultimo_mensaje = new Date(cliente.ultimo_mensaje).getTime();
 		const ahora = Date.now();
-
-
-		
 		if (cliente) {
 			if(cliente.status_actual==0){
 				conversacion = await getSiguienteConversacion();
@@ -94,7 +87,6 @@ app.post('/', async (req, res) => {
 				status_anterior = 0;
 				console.log('🆕 Cliente recuperado');
 			} else {
-//console.log('📩 Delay:', ahora, ' - ',ultimo_mensaje, ' > ',30 * 60 * 1000);				
 				if ((ahora - ultimo_mensaje) > (30 * 60 * 1000)) {
 					// Reiniciar bot, por tiempo excedido
 					status_actual = await getSiguienteEstado(ID_BOT, 0);			
@@ -164,7 +156,6 @@ app.post('/', async (req, res) => {
 			}
 			status_siguiente = await getSiguienteEstado(ID_BOT, status_actual);		
 		}	
-				
 		await updateCliente(
 			telefono,
 			status_actual,   // por ahora no cambia
@@ -179,14 +170,12 @@ app.post('/', async (req, res) => {
 
 		// 🎯 Obtener acción del estado actual
 		accion = await getAccionByEstado(ID_BOT, status_actual);
-//console.log(JSON.stringify(accion, null, 2));		
 		if (!accion) {
 			console.log('⚠️ No hay acción definida para status actual ', status_actual);
 			return;
 		}
-		
 		if(accion.enviar_imagen){
-			sendWhatsAppImages(telefono, accion.enviar_imagen)
+			sendWhatsAppImages(telefono, accion.enviar_imagen)														//<----------------------------------------
 			console.log('💫 Enviar imagen ', accion.enviar_imagen);
 		}
 
@@ -199,9 +188,8 @@ function limpiarMensaje(texto) {
 
 let mensaje2 = limpiarMensaje(accion.mensaje_accion);
 
-await sendWhatsAppMessage(telefono, mensaje2);		
-//		await sendWhatsAppMessage(telefono, accion.mensaje_accion);
-//		console.log('📤 Acción de estado actual enviada.');
+await sendWhatsAppMessage(telefono, mensaje2);		                         //<----------------------------------------
+		console.log('📤 Acción de estado actual enviada.');
 		
 		// Obtener opciones del menu
 		const opciones = await getOpciones(ID_BOT, status_actual);
