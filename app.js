@@ -99,6 +99,13 @@ app.post('/', async (req, res) => {
 					status_actual = await getSiguienteEstado(ID_BOT, 0);			
 					status_anterior = 0;
 					conversacion = await getSiguienteConversacion();
+					await updateCliente(
+						telefono,
+						status_actual,   // por ahora no cambia
+						status_anterior,   // anterior = mismo valor (temporal)
+						fecha,
+						conversacion
+					);					
 				} else {
 					status_actual = cliente.status_actual;
 					status_anterior = cliente.status_anterior;
