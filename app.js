@@ -80,6 +80,13 @@ app.post('/', async (req, res) => {
 		let status_anterior;
 		let conversacion;
 		//-------------------------------------------------------------------------------------------------------------
+		
+		
+		const fechaStatus = new Date(cliente.status_actual).getTime();
+		const ahora = Date.now();
+
+
+		
 		if (cliente) {
 			if(cliente.status_actual==0){
 				conversacion = await getSiguienteConversacion();
@@ -87,9 +94,15 @@ app.post('/', async (req, res) => {
 				status_anterior = 0;
 				console.log('🆕 Cliente recuperado');
 			} else {
-				status_actual = cliente.status_actual;
-				status_anterior = cliente.status_anterior;
-				conversacion = await cliente.ultima_conversacion;
+				if ((ahora - fechaStatus) > (30 * 60 * 1000)) {
+					// Reiniciar bot, por tiempo excedido
+					status_actual = await getSiguienteEstado(ID_BOT, 0);			
+					status_anterior = 0;
+				} else {
+					status_actual = cliente.status_actual;
+					status_anterior = cliente.status_anterior;
+					conversacion = await cliente.ultima_conversacion;
+				}
 			}
 		} else {
 			conversacion = await getSiguienteConversacion();
