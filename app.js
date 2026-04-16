@@ -13,13 +13,13 @@ const {
 } = require('./models/clientes');
 const { sendWhatsAppMessage } = require('./models/whatsapp');
 const { sendWhatsAppImages }  = require('./models/whatsapp');
-		const { getSiguienteEstado } = require('./models/secuencias');
-		const { getOpciones } = require('./models/secuencias');
-		const { esMenu } = require('./models/secuencias');
-		const { getAccionDeOpcionMenu } = require('./models/secuencias');
-		const { getAccionByEstado } = require('./models/acciones');
-		const { getSiguienteConversacion } = require('./models/conversaciones');
-		const { upsertCampoEnTabla } = require('./models/campos_en_tablas.js');
+const { getSiguienteEstado } = require('./models/secuencias');
+const { getOpciones } = require('./models/secuencias');
+const { esMenu } = require('./models/secuencias');
+const { getAccionDeOpcionMenu } = require('./models/secuencias');
+const { getAccionByEstado } = require('./models/acciones');
+const { getSiguienteConversacion } = require('./models/conversaciones');
+const { upsertCampoEnTabla } = require('./models/campos_en_tablas.js');
 
 // GET Verifica Token de WebHook
 app.get('/', (req, res) => {
