@@ -98,6 +98,7 @@ app.post('/', async (req, res) => {
 					// Reiniciar bot, por tiempo excedido
 					status_actual = await getSiguienteEstado(ID_BOT, 0);			
 					status_anterior = 0;
+					conversacion = await getSiguienteConversacion();
 				} else {
 					status_actual = cliente.status_actual;
 					status_anterior = cliente.status_anterior;
