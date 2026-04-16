@@ -94,7 +94,7 @@ app.post('/', async (req, res) => {
 				status_anterior = 0;
 				console.log('🆕 Cliente recuperado');
 			} else {
-console.log('📩 Delay:', ahora, ' - ',ultimo_mensaje, ' > ',30 * 60 * 1000);				
+//console.log('📩 Delay:', ahora, ' - ',ultimo_mensaje, ' > ',30 * 60 * 1000);				
 				if ((ahora - ultimo_mensaje) > (30 * 60 * 1000)) {
 					// Reiniciar bot, por tiempo excedido
 					status_actual = await getSiguienteEstado(ID_BOT, 0);			
@@ -189,8 +189,18 @@ console.log('📩 Delay:', ahora, ' - ',ultimo_mensaje, ' > ',30 * 60 * 1000);
 			sendWhatsAppImages(telefono, accion.enviar_imagen)
 			console.log('💫 Enviar imagen ', accion.enviar_imagen);
 		}
-		
-		await sendWhatsAppMessage(telefono, accion.mensaje_accion);
+
+function limpiarMensaje(texto) {
+  return texto
+    .replace(/\\\\n/g, "\n")  // doble escape
+    .replace(/\\n/g, "\n")    // escape normal
+    .replace(/\r\n/g, "\n");  // windows
+}
+
+let mensaje2 = limpiarMensaje(accion.mensaje_accion);
+
+await sendWhatsAppMessage(telefono, mensaje2);		
+//		await sendWhatsAppMessage(telefono, accion.mensaje_accion);
 //		console.log('📤 Acción de estado actual enviada.');
 		
 		// Obtener opciones del menu
