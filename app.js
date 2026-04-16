@@ -82,7 +82,7 @@ app.post('/', async (req, res) => {
 		//-------------------------------------------------------------------------------------------------------------
 		
 		
-		const fechaStatus = new Date(cliente.status_actual).getTime();
+		const ultimo_mensaje = new Date(cliente.ultimo_mensaje).getTime();
 		const ahora = Date.now();
 
 
@@ -94,8 +94,8 @@ app.post('/', async (req, res) => {
 				status_anterior = 0;
 				console.log('🆕 Cliente recuperado');
 			} else {
-console.log('📩 Delay:', ahora, ' - ', fechaStatus, ' > ',30 * 60 * 1000);				
-				if ((ahora - fechaStatus) > (30 * 60 * 1000)) {
+console.log('📩 Delay:', ahora, ' - ',ultimo_mensaje, ' > ',30 * 60 * 1000);				
+				if ((ahora - ultimo_mensaje) > (30 * 60 * 1000)) {
 					// Reiniciar bot, por tiempo excedido
 					status_actual = await getSiguienteEstado(ID_BOT, 0);			
 					status_anterior = 0;
