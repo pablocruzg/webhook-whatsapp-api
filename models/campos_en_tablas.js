@@ -15,7 +15,7 @@ async function upsertCampoEnTabla(
     campo,
     valor
 ) {
-
+		valor = valor.trim();
     const sql = `
         INSERT INTO ${escapeId(tabla)}
         (conversacion, telefono, nombre, fecha_hora, ${escapeId(campo)})
