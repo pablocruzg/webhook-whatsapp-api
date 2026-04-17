@@ -73,7 +73,7 @@ app.post('/', async (req, res) => {
     const fecha = new Date().toISOString().slice(0, 19).replace('T', ' ');
     console.log('📩 Mensaje:', mensaje);
 
-console.log('📩 findCliente:', telefono, id_bot);
+//console.log('📩 findCliente:', telefono, id_bot);
 		let cliente = await findCliente(telefono, id_bot);
 		let status_actual;
 		let status_anterior;
@@ -109,7 +109,7 @@ console.log('📩 findCliente:', telefono, id_bot);
 			}
 		} else {
 			conversacion = await getSiguienteConversacion();
-			await addCliente(telefono, nombre, fecha, conversacion);
+			await addCliente(telefono, id_bot, nombre, fecha, conversacion);
 			status_actual = await getSiguienteEstado(id_bot, 0);			
 			status_anterior = 0;
 			console.log('🆕 Cliente creado');

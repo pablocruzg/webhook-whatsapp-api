@@ -16,14 +16,14 @@ async function findCliente(telefono, id_bot) {
 }
 
 // ➕ Crear cliente nuevo
-async function addCliente(telefono, nombre, fecha, conversacion) {
+async function addCliente(telefono, id_bot, nombre, fecha, conversacion) {
   const sql = `
     INSERT INTO clientes 
-    (telefono, titular, status_actual, status_anterior, ultima_conversacion, ultimo_mensaje)
-    VALUES (?, ?, 0, 0, ?, ?)
+    (telefono, id_bot, titular, status_actual, status_anterior, ultima_conversacion, ultimo_mensaje)
+    VALUES (?, ?, ?, 0, 0, ?, ?)
   `;
 
-  await db.execute(sql, [telefono, nombre, conversacion, fecha]);
+  await db.execute(sql, [telefono, id_bot, nombre, conversacion, fecha]);
 }
 
 // 🔄 Actualizar cliente
