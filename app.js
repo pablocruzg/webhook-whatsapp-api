@@ -174,6 +174,7 @@ app.post('/', async (req, res) => {
 			console.log('⚠️ No hay acción definida para status actual ', status_actual);
 			return;
 		}
+		//Envía Imágenes
 		if(accion.enviar_imagen){
 			await sendWhatsAppImages(telefono, accion.enviar_imagen)														
 			console.log('💫 Enviar imagen ', accion.enviar_imagen);
@@ -199,9 +200,11 @@ await sendWhatsAppMessage(telefono, mensaje2);
 //			return;
 		}
 		// 📋 Construir menú
+		const numerosEmoji = ['1️⃣','2️⃣','3️⃣','4️⃣','5️⃣','6️⃣','7️⃣','8️⃣','9️⃣','🔟'];
 		let menu = 'Selecciona una opción:\n';
 		opciones.forEach((op, index) => {
-			menu += `${index + 1} - ${op.nombre}\n`;
+			const num = numerosEmoji[index] || `${index+1}`;
+			menu += `${num}  ${op.nombre}\n`;
 		});
 		if (opciones.length>1) {
 			await sendWhatsAppMessage(telefono, menu);
