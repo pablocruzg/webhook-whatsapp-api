@@ -27,7 +27,7 @@ async function addCliente(telefono, id_bot, nombre, fecha, conversacion) {
 }
 
 // 🔄 Actualizar cliente
-async function updateCliente(telefono, status_actual, status_anterior, fecha, conversacion) {
+async function updateCliente(telefono, id_bot, status_actual, status_anterior, fecha, conversacion) {
   const sql = `
     UPDATE clientes
     SET status_actual = ?,
@@ -35,9 +35,10 @@ async function updateCliente(telefono, status_actual, status_anterior, fecha, co
         ultimo_mensaje = ?,
         ultima_conversacion = ?
     WHERE telefono = ?
+		AND id_bot = ?
   `;
 
-  await db.execute(sql, [status_actual, status_anterior, fecha, conversacion, telefono]);
+  await db.execute(sql, [status_actual, status_anterior, fecha, conversacion, telefono, id_bot]);
 }
 
 module.exports = {

@@ -95,6 +95,7 @@ app.post('/', async (req, res) => {
 					conversacion = await getSiguienteConversacion();
 					await updateCliente(
 						telefono,
+						id_bot,
 						status_actual,   // por ahora no cambia
 						status_anterior,   // anterior = mismo valor (temporal)
 						fecha,
@@ -161,6 +162,7 @@ app.post('/', async (req, res) => {
 		
 		await updateCliente(
 			telefono,
+			id_bot,
 			status_actual,   // por ahora no cambia
 			status_anterior,   // anterior = mismo valor (temporal)
 			fecha,
@@ -228,6 +230,7 @@ await sendWhatsAppMessage(telefono, mensaje2);
 		}
 		await updateCliente(
 			telefono,
+			id_bot,
 			status_siguiente,
 			status_actual,
 			fecha,
