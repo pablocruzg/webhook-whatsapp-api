@@ -177,7 +177,7 @@ app.post('/', async (req, res) => {
 		if(accion.enviar_imagen){
 			sendWhatsAppImages(telefono, accion.enviar_imagen)														
 			console.log('💫 Enviar imagen ', accion.enviar_imagen);
-			await new Promise(r => setTimeout(r, 1200)); // Delay para que llegue primero las imágenes y despues el texto.
+			await new Promise(r => setTimeout(r, 2400)); // Delay para que llegue primero las imágenes y despues el texto.
 		}
 
 function limpiarMensaje(texto) {
