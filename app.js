@@ -56,7 +56,7 @@ app.post('/', async (req, res) => {
   res.status(200).end(); // ⚡ responder inmediato (como PHP)
 
   try {
-		const ID_BOT =2; // ajusta si tienes varios bots
+		const id_bot = 2; // ajusta si tienes varios bots
 		const body = req.body;
     const msg = body.entry?.[0]?.changes?.[0]?.value?.messages?.[0];
     const contact = body.entry?.[0]?.changes?.[0]?.value?.contacts?.[0];
@@ -73,7 +73,8 @@ app.post('/', async (req, res) => {
     const fecha = new Date().toISOString().slice(0, 19).replace('T', ' ');
     console.log('📩 Mensaje:', mensaje);
 
-		let cliente = await findCliente(telefono);
+console.log('📩 findCliente:', telefono, id_bot);
+		let cliente = await findCliente(telefono, id_bot);
 		let status_actual;
 		let status_anterior;
 		let conversacion;
@@ -83,13 +84,13 @@ app.post('/', async (req, res) => {
 		if (cliente) {
 			if(cliente.status_actual==0){
 				conversacion = await getSiguienteConversacion();
-				status_actual = await getSiguienteEstado(ID_BOT, 0);			
+				status_actual = await getSiguienteEstado(id_bot, 0);			
 				status_anterior = 0;
 				console.log('🆕 Cliente recuperado');
 			} else {
 				if ((ahora - ultimo_mensaje) > (30 * 60 * 1000)) {
 					// Reiniciar bot, por tiempo excedido
-					status_actual = await getSiguienteEstado(ID_BOT, 0);			
+					status_actual = await getSiguienteEstado(id_bot, 0);			
 					status_anterior = 0;
 					conversacion = await getSiguienteConversacion();
 					await updateCliente(
@@ -109,41 +110,22 @@ app.post('/', async (req, res) => {
 		} else {
 			conversacion = await getSiguienteConversacion();
 			await addCliente(telefono, nombre, fecha, conversacion);
-			status_actual = await getSiguienteEstado(ID_BOT, 0);			
+			status_actual = await getSiguienteEstado(id_bot, 0);			
 			status_anterior = 0;
 			console.log('🆕 Cliente creado');
 		}		
     console.log('📩 Conversacion:', conversacion);
 		
 		//Identificar si es respuesta de Opcion-Menu o Texto Input
-		let respuestaMenu = await esMenu(ID_BOT, status_anterior);
+		let respuestaMenu = await esMenu(id_bot, status_anterior);
 		console.log('🔄 Es respuesta de menu:', respuestaMenu, status_actual, ' - ',status_anterior);
 		
 		let status_siguiente;
 		let accion;
 		let accion_anterior;
 		let ioresult;
-		
-		if (respuestaMenu) {
-			if (!/^\d+$/.test(mensaje)) {
-					await sendWhatsAppMessage(telefono, 'Ingrese una opcion válida.');
-					console.log('❌ No es número');
-					return;
-			}
 
-			const opcion = Number(mensaje);
-
-			if (!(await getAccionDeOpcionMenu(ID_BOT, status_anterior, opcion))) {
-					await sendWhatsAppMessage(telefono, 'Ingrese una opcion válida.');
-					console.log('❌ Opción no existe en el menú');
-					return;
-			}
-
-			// ✅ Opción válida
-			status_actual = await getAccionDeOpcionMenu(ID_BOT, status_anterior, opcion);
-			status_siguiente = await getSiguienteEstado(ID_BOT, status_actual);			
-		} else {		
-			accion_anterior = await getAccionByEstado(ID_BOT, status_anterior);
+			accion_anterior = await getAccionByEstado(id_bot, status_anterior);
 			if (!accion_anterior) {
 //					console.log('🟢 Primer estado: no hay acción anterior');
 			} 
@@ -154,8 +136,29 @@ app.post('/', async (req, res) => {
 			} else {
 //				console.log('No es campo input.');
 			}
-			status_siguiente = await getSiguienteEstado(ID_BOT, status_actual);		
-		}	
+			status_siguiente = await getSiguienteEstado(id_bot, status_actual);		
+		
+		
+		if (respuestaMenu) {
+			if (!/^\d+$/.test(mensaje)) {
+					await sendWhatsAppMessage(telefono, 'Ingrese una opcion válida.');
+					console.log('❌ No es número');
+					return;
+			}
+
+			const opcion = Number(mensaje);
+
+			if (!(await getAccionDeOpcionMenu(id_bot, status_anterior, opcion))) {
+					await sendWhatsAppMessage(telefono, 'Ingrese una opcion válida.');
+					console.log('❌ Opción no existe en el menú');
+					return;
+			}
+
+			// ✅ Opción válida
+			status_actual = await getAccionDeOpcionMenu(id_bot, status_anterior, opcion);
+			status_siguiente = await getSiguienteEstado(id_bot, status_actual);			
+		} 
+		
 		await updateCliente(
 			telefono,
 			status_actual,   // por ahora no cambia
@@ -169,7 +172,7 @@ app.post('/', async (req, res) => {
 //    console.log('✅ Guardado en MySQL');
 
 		// 🎯 Obtener acción del estado actual
-		accion = await getAccionByEstado(ID_BOT, status_actual);
+		accion = await getAccionByEstado(id_bot, status_actual);
 		if (!accion) {
 			console.log('⚠️ No hay acción definida para status actual ', status_actual);
 			return;
@@ -194,14 +197,14 @@ await sendWhatsAppMessage(telefono, mensaje2);
 		console.log('📤 Acción de estado actual enviada.');
 		
 		// Obtener opciones del menu
-		const opciones = await getOpciones(ID_BOT, status_actual);
+		const opciones = await getOpciones(id_bot, status_actual);
 		if (!opciones.length) {
 //			console.log('⚠️ No hay opciones');
 //			return;
 		}
 		// 📋 Construir menú
 		const numerosEmoji = ['1️⃣','2️⃣','3️⃣','4️⃣','5️⃣','6️⃣','7️⃣','8️⃣','9️⃣','🔟'];
-		let menu = 'Selecciona una opción:\n';
+		let menu = 'Selecciona una opción:\n\n';
 		opciones.forEach((op, index) => {
 			const num = numerosEmoji[index] || `${index+1}`;
 			menu += `${num}  ${op.nombre}\n`;
