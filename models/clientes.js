@@ -1,15 +1,16 @@
 const db = require('../db');
 
 // 🔍 Buscar cliente
-async function findCliente(telefono) {
+async function findCliente(telefono, id_bot) {
   const sql = `
     SELECT * 
     FROM clientes 
     WHERE telefono = ?
+		AND id_bot = ?
     LIMIT 1
   `;
 
-  const [rows] = await db.execute(sql, [telefono]);
+  const [rows] = await db.execute(sql, [telefono, id_bot]);
 
   return rows.length > 0 ? rows[0] : null;
 }
