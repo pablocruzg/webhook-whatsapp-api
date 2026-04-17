@@ -2,6 +2,11 @@ const db = require('../db');
 
 // 🔍 Buscar cliente
 async function findCliente(telefono, id_bot) {
+	
+if ([telefono, id_bot].includes(undefined)) {
+    throw new Error('Hay parámetros undefined');
+}	
+	
   const sql = `
     SELECT * 
     FROM clientes 
@@ -17,6 +22,11 @@ async function findCliente(telefono, id_bot) {
 
 // ➕ Crear cliente nuevo
 async function addCliente(telefono, id_bot, nombre, fecha, conversacion) {
+	
+if ([telefono, id_bot, nombre, conversacion, fecha].includes(undefined)) {
+    throw new Error('Hay parámetros undefined');
+}	
+	
   const sql = `
     INSERT INTO clientes 
     (telefono, id_bot, titular, status_actual, status_anterior, ultima_conversacion, ultimo_mensaje)
@@ -28,6 +38,11 @@ async function addCliente(telefono, id_bot, nombre, fecha, conversacion) {
 
 // 🔄 Actualizar cliente
 async function updateCliente(telefono, id_bot, status_actual, status_anterior, fecha, conversacion, id_bot) {
+	
+if ([status_actual, status_anterior, fecha, conversacion, telefono, id_bot].includes(undefined)) {
+    throw new Error('Hay parámetros undefined');
+}		
+	
   const sql = `
     UPDATE clientes
     SET status_actual = ?,
