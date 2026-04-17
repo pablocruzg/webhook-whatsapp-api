@@ -79,9 +79,9 @@ app.post('/', async (req, res) => {
 		let status_anterior;
 		let conversacion;
 		//-------------------------------------------------------------------------------------------------------------
-		const ultimo_mensaje = new Date(cliente.ultimo_mensaje).getTime();
 		const ahora = Date.now();
 		if (cliente) {
+			const ultimo_mensaje = new Date(cliente.ultimo_mensaje).getTime();
 			if(cliente.status_actual==0){
 				conversacion = await getSiguienteConversacion();
 				status_actual = await getSiguienteEstado(id_bot, 0);			
