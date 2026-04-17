@@ -175,9 +175,9 @@ app.post('/', async (req, res) => {
 			return;
 		}
 		if(accion.enviar_imagen){
-			sendWhatsAppImages(telefono, accion.enviar_imagen)														//<----------------------------------------
-await sendWhatsAppMessage(telefono, accion.mensaje_accion);		                         //<----------------------------------------
+			sendWhatsAppImages(telefono, accion.enviar_imagen)														
 			console.log('💫 Enviar imagen ', accion.enviar_imagen);
+			await new Promise(r => setTimeout(r, 1200)); // Delay para que llegue primero las imágenes y despues el texto.
 		}
 
 function limpiarMensaje(texto) {
@@ -189,7 +189,7 @@ function limpiarMensaje(texto) {
 
 let mensaje2 = limpiarMensaje(accion.mensaje_accion);
 
-await sendWhatsAppMessage(telefono, mensaje2);		                         //<----------------------------------------
+await sendWhatsAppMessage(telefono, mensaje2);		                         
 		console.log('📤 Acción de estado actual enviada.');
 		
 		// Obtener opciones del menu
